@@ -7,10 +7,10 @@
 #include "array_lib/Array.h"
 #include "trees_lib/AVLTree.h"
 
-using rbtree = RedBlackTree<int32_t>;
-using list = LinkedList<int32_t>;
-using heap = BinaryHeap<int32_t>;
-using array = Array<int32_t>;
-using avltree = AVLTree<int32_t>;
+using rbtree = RedBlackTree;
+using list = LinkedList;
+using heap = BinaryHea;
+using array = Array;
+using avltree = AVLTree;
 
 #endif //SDIZO_1_STRUCTURES_H

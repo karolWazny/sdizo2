@@ -1,5 +1,9 @@
-//
-// Created by admin on 04.05.2021.
-//
-
 #include "ListGraph.h"
+
+void ListGraph::addVertex() {
+    size++;
+    auto vertix = ListGraphVertix();
+    vertix.id = usedVertixIds;
+    usedVertixIds++;
+    vertices.pushBack(vertix);
+}
