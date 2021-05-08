@@ -40,6 +40,7 @@ public:
     vertexId_t id{};
     LinkedList<ListGraphEdge> edges;
     explicit ListGraphVertix(vertexId_t vertexId) : id{vertexId} {};
+    ListGraphVertix() : id{0} {};
 };
 
 #endif //SDIZO2_LISTGRAPH_H
