@@ -9,32 +9,35 @@ struct ListGraphVertix;
 
 class ListGraph : Graph {
 public:
-    virtual void addVertex();
-    virtual void addEdge(size_t initialVertex, size_t finalVertex, int weight);
-    virtual void removeVertex(size_t vertexId);
-    virtual void removeEdge(size_t initialVertex, size_t finalVertex);
-    virtual size_t verticesAmount();
-    virtual size_t edgesAmount();
+    void addVertex() override;
+    void addEdge(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
+    virtual void removeVertex(vertexId_t vertexId);
+    virtual void removeEdge(vertexId_t initialVertex, vertexId_t finalVertex);
+    virtual vertexId_t verticesAmount();
+    virtual vertexId_t edgesAmount();
 
-    virtual PathPointer shortestPathPrim(size_t initialVertex, size_t finalVertex);
-    virtual PathPointer shortestPathKruskal(size_t initialVertex, size_t finalVertex);
+    virtual PathPointer shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex);
+    virtual PathPointer shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex);
     virtual GraphPointer MSTDijkstra();
     virtual GraphPointer MSTFB();
 private:
     LinkedList<ListGraphVertix> vertices;
-    size_t size{0};
-    size_t usedVertixIds{0};
+    vertexId_t size{0};
+    vertexId_t usedVertixIds{0};
 };
 
-struct ListGraphEdge {
+class ListGraphEdge {
 public:
-    size_t finalVertex;
-    int weight;
+    vertexId_t finalVertex;
+    int weight{};
+
+    explicit ListGraphEdge(vertexId_t vertex) : finalVertex{vertex} {};
+    ListGraphEdge() : finalVertex{0} {};
 };
 
 struct ListGraphVertix {
 public:
-    size_t id{};
+    vertexId_t id{};
     LinkedList<ListGraphEdge> edges;
 };
 

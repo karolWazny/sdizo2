@@ -1,7 +1,7 @@
 #ifndef SDIZO_1_REDBLACK_H
 #define SDIZO_1_REDBLACK_H
 
-#include "trees_lib/colors/Colored.h"
+#include "Colored.h"
 
 enum class Color : char
 {

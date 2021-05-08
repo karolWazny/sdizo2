@@ -9,11 +9,13 @@ class LinkedListItem;
 template <typename T>
 class INextable
 {
+private:
+    T content{T()};
 public:
     virtual std::shared_ptr<INextable<T>> getNext();
     virtual void setNext(std::shared_ptr<INextable<T>>);
     virtual bool hasNext();
-    virtual T getContent();
+    virtual T& getContent();
     virtual std::shared_ptr<INextable<T>> getPrevious();
     virtual void setPrevious(std::weak_ptr<INextable<T>>);
     virtual void putAfter(T);
@@ -37,8 +39,8 @@ void INextable<T>::setNext(std::shared_ptr<INextable<T>> pointer) {
 }
 
 template<typename T>
-T INextable<T>::getContent() {
-    return NULL;
+T& INextable<T>::getContent() {
+    return content;
 }
 
 template<typename T>

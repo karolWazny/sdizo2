@@ -28,7 +28,7 @@ private:
 public:
     explicit LinkedListItem(type);
     LinkedListItem(type, std::shared_ptr<INextable<type>>);
-    type getContent() override;
+    type& getContent() override;
     std::shared_ptr<INextable<type>> getNext() override;
     void setNext(std::shared_ptr<INextable<type>> next) override;
     std::shared_ptr<INextable<type>> getPrevious() override;
@@ -109,7 +109,7 @@ void LinkedListItem<type>::swap(std::shared_ptr<INextable<type>>replacement) {
 }
 
 template<typename type>
-type LinkedListItem<type>::getContent() {
+type& LinkedListItem<type>::getContent() {
     return content;
 }
 

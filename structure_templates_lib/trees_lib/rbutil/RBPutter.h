@@ -1,7 +1,7 @@
 #ifndef SDIZO_1_RBPUTTER_H
 #define SDIZO_1_RBPUTTER_H
 
-#include <trees_lib/nodes/RBFactory.h>
+#include "trees_lib/nodes/RBFactory.h"
 #include "trees_lib/node_util/NodePutter.h"
 #include "trees_lib/rbutil/PutPropertyRestorer.h"
 

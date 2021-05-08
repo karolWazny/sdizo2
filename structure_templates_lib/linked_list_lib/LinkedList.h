@@ -9,6 +9,7 @@ template <typename type>
 class LinkedList
 {
 public:
+    int firstIndexOf(type element);
     bool contains(type element);
     void addAtPosition(type, int);
     void putAfter(type whereToPut, type elementToAdd);
@@ -19,10 +20,10 @@ public:
     void pushFront(type);
     type removeLast();
     type removeFirst();
-    type get(int index);
+    type& get(int index);
     bool isEmpty();
     int getLength();
-    LinkedList<type>();
+    LinkedList();
     class Nexter : public  INextable<type> {
     public:
         std::shared_ptr<INextable<type>> pointer;
@@ -164,7 +165,7 @@ T LinkedList<T>::removeLast()
 
 //dostęp do klucza w elemencie na danej pozycji
 template<typename type>
-type LinkedList<type>::get(int index) {
+type& LinkedList<type>::get(int index) {
     return getItem(index)->getContent();
 }
 
@@ -310,6 +311,24 @@ bool LinkedList<type>::contains(type element) {
         }
     }
     return false;
+}
+
+template<typename type>
+int LinkedList<type>::firstIndexOf(type element) {
+    if(isEmpty())
+    {
+        return -1;
+    }
+    auto buffer = guard->getNext();
+    for(int i = 0; i < length; i++)
+    {
+        if(buffer->getContent() == element)
+        {
+            return i;
+        }
+        buffer = buffer->getNext();
+    }
+    return -1;
 }
 
 #endif //SDIZO_1_LINKEDLIST_H
