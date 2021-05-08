@@ -4,6 +4,10 @@ bool operator==(const ListGraphVertix& v, const ListGraphVertix& w) {
     return v.id == w.id;
 }
 
+bool operator==(const ListGraphEdge& e, const ListGraphEdge& f) {
+    return e.finalVertex == f.finalVertex;
+}
+
 void ListGraph::addVertex() {
     size++;
     auto vertix = ListGraphVertix();
@@ -32,4 +36,42 @@ void ListGraph::addEdge(vertexId_t initialVertex, vertexId_t finalVertex, int we
     } else {
         //nie wiem... rzucić wyjątek? na razie będzie ciche niepowodzenie
     }
+}
+
+void ListGraph::removeVertex(vertexId_t vertexId) {
+
+}
+
+void ListGraph::removeEdge(vertexId_t initialVertex, vertexId_t finalVertex) {
+    auto index = vertices.firstIndexOf(ListGraphVertix(initialVertex));
+    if(index > -1)
+    {
+        auto initVer = vertices.get(index);
+        initVer.edges.remove(ListGraphEdge(finalVertex));
+    }
+    //jeżeli próbujemy usunąć coś czego nie ma, robimy ciche niepowodzenie
+}
+
+vertexId_t ListGraph::verticesAmount() {
+    return vertices.getLength();
+}
+
+vertexId_t ListGraph::edgesAmount() {
+    return 0;
+}
+
+PathPointer ListGraph::shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex) {
+    return PathPointer();
+}
+
+PathPointer ListGraph::shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex) {
+    return PathPointer();
+}
+
+GraphPointer ListGraph::MSTDijkstra() {
+    return GraphPointer();
+}
+
+GraphPointer ListGraph::MSTFB() {
+    return GraphPointer();
 }

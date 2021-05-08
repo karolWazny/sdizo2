@@ -39,6 +39,7 @@ struct ListGraphVertix {
 public:
     vertexId_t id{};
     LinkedList<ListGraphEdge> edges;
+    explicit ListGraphVertix(vertexId_t vertexId) : id{vertexId} {};
 };
 
 #endif //SDIZO2_LISTGRAPH_H

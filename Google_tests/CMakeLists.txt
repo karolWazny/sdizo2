@@ -4,9 +4,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 # adding the Google_Tests_run target
 add_executable(Google_Tests_run
-        InitialTest.cpp)
+        InitialTest.cpp
+        ListGraphTest.cpp)
 
-# linking Google_Tests_run with structure_templates_lib which will be tested
-target_link_libraries(Google_Tests_run)
-
-target_link_libraries(Google_Tests_run gtest gtest_main)
+target_link_libraries(Google_Tests_run gtest gtest_main graphs)
