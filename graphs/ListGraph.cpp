@@ -23,7 +23,7 @@ void ListGraph::addEdge(vertexId_t initialVertex, vertexId_t finalVertex, int we
     bool containsInitialVertex = this->vertices.contains(v);
     if(containsInitialVertex && containsFinalVertex) {
         auto index = vertices.firstIndexOf(v);
-        auto initVer = vertices.get(index);
+        ListGraphVertix &initVer = vertices.get(index);
         index = initVer.edges.firstIndexOf((ListGraphEdge)finalVertex);
         if(index > -1)
         {
@@ -60,12 +60,18 @@ void ListGraph::removeEdge(vertexId_t initialVertex, vertexId_t finalVertex) {
     //jeżeli próbujemy usunąć coś czego nie ma, robimy ciche niepowodzenie
 }
 
-vertexId_t ListGraph::verticesAmount() {
+size_t ListGraph::verticesAmount() {
     return vertices.getLength();
 }
 
-vertexId_t ListGraph::edgesAmount() {
-    return 0;
+size_t ListGraph::edgesAmount() {
+    size_t sum = 0;
+    auto iterator = this->vertices.iterator();
+    while(iterator.hasNext())
+    {
+        sum += iterator.next().edges.getLength();
+    }
+    return sum;
 }
 
 PathPointer ListGraph::shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex) {

@@ -38,6 +38,7 @@ void ListIterator<T>::remove() {
         owningList->lasteIndex = current->getPrevious();
     }
     current->remove();
+    owningList->length--;
 }
 
 #endif //SDIZO2_LISTITERATOR_H

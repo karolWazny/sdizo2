@@ -13,8 +13,8 @@ public:
     void addEdge(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
     void removeVertex(vertexId_t vertexId) override;
     void removeEdge(vertexId_t initialVertex, vertexId_t finalVertex) override;
-    vertexId_t verticesAmount() override;
-    virtual vertexId_t edgesAmount();
+    size_t verticesAmount() override;
+    size_t edgesAmount() override;
 
     virtual PathPointer shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex);
     virtual PathPointer shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex);
