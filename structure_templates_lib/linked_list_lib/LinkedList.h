@@ -2,13 +2,16 @@
 #define SDIZO_1_LINKEDLIST_H
 
 #include "LinkedListItem.h"
+#include "ListIterator.h"
 #include <string>
 
 //szablon klasy listy podwójnie wiązanej
 template <typename type>
 class LinkedList
 {
+    friend ListIterator<type>;
 public:
+    ListIterator<type> iterator();
     int firstIndexOf(type element);
     bool contains(type element);
     void addAtPosition(type, int);
@@ -329,6 +332,11 @@ int LinkedList<type>::firstIndexOf(type element) {
         buffer = buffer->getNext();
     }
     return -1;
+}
+
+template<typename type>
+ListIterator<type> LinkedList<type>::iterator() {
+    return ListIterator<type>(this, guard);
 }
 
 #endif //SDIZO_1_LINKEDLIST_H

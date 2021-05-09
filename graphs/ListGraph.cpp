@@ -9,7 +9,6 @@ bool operator==(const ListGraphEdge& e, const ListGraphEdge& f) {
 }
 
 void ListGraph::addVertex() {
-    size++;
     auto vertix = ListGraphVertix();
     vertix.id = usedVertixIds;
     usedVertixIds++;
@@ -25,10 +24,13 @@ void ListGraph::addEdge(vertexId_t initialVertex, vertexId_t finalVertex, int we
     if(containsInitialVertex && containsFinalVertex) {
         auto index = vertices.firstIndexOf(v);
         auto initVer = vertices.get(index);
-        if(initVer.edges.contains((ListGraphEdge)finalVertex))
+        index = initVer.edges.firstIndexOf((ListGraphEdge)finalVertex);
+        if(index > -1)
         {
-            //do nothing
+            //jeżeli taka krawędź już istnieje, aktualizujemy jej wagę
+            initVer.edges.get(index).weight = weight;
         } else {
+            //jeżeli nie istnieje, po prostu ją tworzymy
             auto edge = ListGraphEdge(finalVertex);
             edge.weight = weight;
             initVer.edges.pushBack(edge);
@@ -39,7 +41,13 @@ void ListGraph::addEdge(vertexId_t initialVertex, vertexId_t finalVertex, int we
 }
 
 void ListGraph::removeVertex(vertexId_t vertexId) {
-
+    auto iterator = this->vertices.iterator();
+    while(iterator.hasNext())
+    {
+        auto currentVertex = iterator.next();
+        currentVertex.edges.remove((ListGraphEdge)vertexId);
+    }
+    this->vertices.remove((ListGraphVertix) vertexId);
 }
 
 void ListGraph::removeEdge(vertexId_t initialVertex, vertexId_t finalVertex) {

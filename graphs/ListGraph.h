@@ -11,9 +11,9 @@ class ListGraph : Graph {
 public:
     void addVertex() override;
     void addEdge(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
-    virtual void removeVertex(vertexId_t vertexId);
-    virtual void removeEdge(vertexId_t initialVertex, vertexId_t finalVertex);
-    virtual vertexId_t verticesAmount();
+    void removeVertex(vertexId_t vertexId) override;
+    void removeEdge(vertexId_t initialVertex, vertexId_t finalVertex) override;
+    vertexId_t verticesAmount() override;
     virtual vertexId_t edgesAmount();
 
     virtual PathPointer shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex);
@@ -22,7 +22,6 @@ public:
     virtual GraphPointer MSTFB();
 private:
     LinkedList<ListGraphVertix> vertices;
-    vertexId_t size{0};
     vertexId_t usedVertixIds{0};
 };
 
