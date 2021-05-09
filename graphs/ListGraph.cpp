@@ -23,7 +23,7 @@ void ListGraph::addEdge(vertexId_t initialVertex, vertexId_t finalVertex, int we
     bool containsInitialVertex = this->vertices.contains(v);
     if(containsInitialVertex && containsFinalVertex) {
         auto index = vertices.firstIndexOf(v);
-        ListGraphVertix &initVer = vertices.get(index);
+        auto &initVer = vertices.get(index);
         index = initVer.edges.firstIndexOf((ListGraphEdge)finalVertex);
         if(index > -1)
         {
@@ -44,7 +44,7 @@ void ListGraph::removeVertex(vertexId_t vertexId) {
     auto iterator = this->vertices.iterator();
     while(iterator.hasNext())
     {
-        auto currentVertex = iterator.next();
+        auto &currentVertex = iterator.next();
         currentVertex.edges.remove((ListGraphEdge)vertexId);
     }
     this->vertices.remove((ListGraphVertix) vertexId);
@@ -54,7 +54,7 @@ void ListGraph::removeEdge(vertexId_t initialVertex, vertexId_t finalVertex) {
     auto index = vertices.firstIndexOf(ListGraphVertix(initialVertex));
     if(index > -1)
     {
-        auto initVer = vertices.get(index);
+        auto& initVer = vertices.get(index);
         initVer.edges.remove(ListGraphEdge(finalVertex));
     }
     //jeżeli próbujemy usunąć coś czego nie ma, robimy ciche niepowodzenie

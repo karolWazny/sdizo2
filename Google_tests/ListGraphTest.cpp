@@ -31,8 +31,11 @@ TEST(ListGraphSuite, RemoveEdge){
     graph.addVertex();
     graph.addVertex();
     graph.addVertex();
+    ASSERT_EQ(graph.edgesAmount(), 0);
     graph.addEdge(0, 2, 8);
+    ASSERT_EQ(graph.edgesAmount(), 1);
     graph.removeEdge(0, 2);
+    ASSERT_EQ(graph.edgesAmount(), 0);
 }
 
 TEST(ListGraphSuite, RemoveVertex){
@@ -41,5 +44,8 @@ TEST(ListGraphSuite, RemoveVertex){
     graph.addVertex();
     graph.addVertex();
     graph.addEdge(0, 2, 8);
+    ASSERT_EQ(graph.edgesAmount(), 1);
     graph.removeVertex(2);
+    ASSERT_EQ(graph.edgesAmount(), 0);
+    ASSERT_EQ(graph.verticesAmount(), 2);
 }
