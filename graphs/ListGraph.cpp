@@ -8,11 +8,14 @@ bool operator==(const ListGraphEdge& e, const ListGraphEdge& f) {
     return e.finalVertex == f.finalVertex;
 }
 
-void ListGraph::addVertex() {
-    auto vertix = ListGraphVertix();
-    vertix.id = usedVertixIds;
-    usedVertixIds++;
-    vertices.pushBack(vertix);
+void ListGraph::addVertex(vertexId_t vertexId) {
+    auto vertex = ListGraphVertix(vertexId);
+    if(vertices.contains(vertex))
+    {
+        //do nothing
+    } else {
+        vertices.pushBack(vertex);
+    }
 }
 
 void ListGraph::addEdge(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
@@ -83,7 +86,14 @@ PathPointer ListGraph::shortestPathKruskal(vertexId_t initialVertex, vertexId_t 
 }
 
 GraphPointer ListGraph::MSTDijkstra() {
-    return GraphPointer();
+    auto tree = GraphPointer(static_cast<Graph*>(new ListGraph()));
+    auto iterator = this->vertices.iterator();
+    while(iterator.hasNext())
+    {
+        auto vertex = iterator.next();
+        tree->addVertex(vertex.id);
+    }
+    return tree;
 }
 
 GraphPointer ListGraph::MSTFB() {
