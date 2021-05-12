@@ -15,7 +15,7 @@ class RedBlackTree
 public:
     RedBlackTree();
     void put(T key);
-    bool contains(T key);
+    bool contains(T key) const;
     void remove(T key);
     string toString();
     string getRepresentation();
@@ -40,7 +40,7 @@ void RedBlackTree<T>::put(T key) {
 }
 
 template<typename T>
-bool RedBlackTree<T>::contains(T key) {
+bool RedBlackTree<T>::contains(T key) const {
     auto finder = KeyFinder<T>(root);
     finder.setDesiredKey(key);
     finder.find();

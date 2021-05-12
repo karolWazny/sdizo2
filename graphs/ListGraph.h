@@ -5,24 +5,24 @@
 #include "../structure_templates_lib/structures.h"
 
 struct ListGraphEdge;
-struct ListGraphVertix;
+struct ListGraphVertex;
 
 class ListGraph : Graph {
 public:
-    void addVertex() override;
-    void addEdge(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
+    void addVertex(vertexId_t vertexId) override;
+    void addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
     void removeVertex(vertexId_t vertexId) override;
-    void removeEdge(vertexId_t initialVertex, vertexId_t finalVertex) override;
+    void removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) override;
     size_t verticesAmount() override;
-    size_t edgesAmount() override;
+    size_t edgesAmountDirected() override;
 
     virtual PathPointer shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex);
     virtual PathPointer shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex);
     virtual GraphPointer MSTDijkstra();
     virtual GraphPointer MSTFB();
 private:
-    LinkedList<ListGraphVertix> vertices;
-    vertexId_t usedVertixIds{0};
+    LinkedList<ListGraphVertex> vertices;
+    long totalWeight;
 };
 
 class ListGraphEdge {
@@ -34,12 +34,18 @@ public:
     ListGraphEdge() : finalVertex{0} {};
 };
 
-struct ListGraphVertix {
+struct Edge {
+    vertexId_t initialVertex;
+    vertexId_t finalVertex;
+    int weight;
+};
+
+struct ListGraphVertex {
 public:
     vertexId_t id{};
     LinkedList<ListGraphEdge> edges;
-    explicit ListGraphVertix(vertexId_t vertexId) : id{vertexId} {};
-    ListGraphVertix() : id{0} {};
+    explicit ListGraphVertex(vertexId_t vertexId) : id{vertexId} {};
+    ListGraphVertex() : id{0} {};
 };
 
 #endif //SDIZO2_LISTGRAPH_H

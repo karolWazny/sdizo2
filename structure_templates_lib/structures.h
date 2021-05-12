@@ -6,6 +6,7 @@
 #include "binary_heap_lib/BinaryHeap.h"
 #include "array_lib/Array.h"
 #include "trees_lib/AVLTree.h"
+#include "binary_heap_lib/FixedMinimumHeap.h"
 
 template <typename T>
 using rbtree = RedBlackTree<T>;

@@ -11,12 +11,12 @@ using GraphPointer = std::shared_ptr<Graph>;
 
 class Graph {
 public:
-    virtual void addVertex() = 0;
-    virtual void addEdge(vertexId_t initialVertex, vertexId_t finalVertex, int weight) = 0;
+    virtual void addVertex(vertexId_t vertexId) = 0;
+    virtual void addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) = 0;
     virtual void removeVertex(vertexId_t vertexId) = 0;
-    virtual void removeEdge(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
+    virtual void removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
     virtual vertexId_t verticesAmount() = 0;
-    virtual vertexId_t edgesAmount() = 0;
+    virtual vertexId_t edgesAmountDirected() = 0;
 
     virtual PathPointer shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
     virtual PathPointer shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex) = 0;

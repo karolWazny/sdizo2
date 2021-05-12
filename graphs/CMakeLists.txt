@@ -9,8 +9,10 @@ set(HEADER_FILES
         ListGraph.h)
 
 set(SOURCE_FILES
-        Graph.cpp
         Path.cpp
         ListGraph.cpp)
 
+link_libraries(structure_templates_lib)
+
 add_library(graphs ${SOURCE_FILES} ${HEADER_FILES})
+
