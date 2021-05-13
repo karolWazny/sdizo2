@@ -181,7 +181,7 @@ TEST(ListGraphSuite, Kruskal2){
     ASSERT_EQ(mst->verticesAmount(), 3);
 }
 
-/*TEST(ListGraphSuite, KruskalFullTestCase){
+TEST(ListGraphSuite, KruskalFullTestCase){
     auto graph = ListGraph();
     for(int i = 0; i < 8; i++)
     {
@@ -238,4 +238,4 @@ TEST(ListGraphSuite, Kruskal2){
     auto mst = graph.MSTKruskal();
     ASSERT_EQ(mst->edgesAmountDirected(), 14);
     ASSERT_EQ(mst->verticesAmount(), 8);
-}*/
+}

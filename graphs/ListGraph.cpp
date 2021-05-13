@@ -191,10 +191,34 @@ GraphPointer ListGraph::MSTKruskal() {
         index++;
     }
 
-    while(true) {
-        break;
+    size_t addedEdges{};
+    //dodawanie do mst kolejnych krawędzi
+    while(edges.getSize() && addedEdges < verticesAmount() - 1) {
+        auto edge = edges.extractRoot();
+        vertexId_t initialColor;
+        vertexId_t finalColor;
+        //do tego dobrze by było użyć słownik, ale jeszcze nie ma napisanego słownika
+        for(int i = 0; i < colorMappings.getLength(); i++) {
+            if(colorMappings[i].id == edge.initialVertex)
+            {
+                initialColor = colorMappings[i].color;
+            } else if(colorMappings[i].id == edge.finalVertex) {
+                finalColor = colorMappings[i].color;
+            }
+        }
+        //jeżeli dodanie tej krawędzi nie spowoduje powstania cyklu
+        if(initialColor != finalColor) {
+            //przekolorowanie węzłów
+            for(int i = 0; i < colorMappings.getLength(); i++) {
+                if(colorMappings[i].color == initialColor) {
+                    colorMappings[i].color = finalColor;
+                }
+            }
+            mst->addEdgeDirected(edge.initialVertex, edge.finalVertex, edge.weight);
+            mst->addEdgeDirected(edge.finalVertex, edge.initialVertex, edge.weight);
+            addedEdges++;
+        }
     }
-
 
     return mst;
 }
