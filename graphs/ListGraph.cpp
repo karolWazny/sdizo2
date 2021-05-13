@@ -12,6 +12,10 @@ bool operator==(const Edge& e, const Edge& f) {
     return e.finalVertex == f.finalVertex && e.initialVertex == f.initialVertex;
 }
 
+bool operator==(VertexColor v, VertexColor f) {
+    return f.id == v.id;
+}
+
 bool operator>=(const Edge& e, const Edge& f) {
     return e.weight >= f.weight;
 }
@@ -105,7 +109,7 @@ PathPointer ListGraph::shortestPathKruskal(vertexId_t initialVertex, vertexId_t 
     return PathPointer();
 }
 
-GraphPointer ListGraph::MSTDijkstra() {
+GraphPointer ListGraph::MSTPrim() {
     //zwracany podgraf
     auto tree = GraphPointer(static_cast<Graph*>(new ListGraph()));
     //drzewo zawierające identyfikatory już dodanych wierzchołków
@@ -166,8 +170,33 @@ GraphPointer ListGraph::MSTDijkstra() {
     return tree;
 }
 
-GraphPointer ListGraph::MSTFB() {
-    return GraphPointer();
+GraphPointer ListGraph::MSTKruskal() {
+    auto mst = GraphPointer(static_cast<Graph*>(new ListGraph()));
+    auto iterator = vertices.iterator();
+    size_t index = 0;
+    Array<VertexColor> colorMappings(verticesAmount());
+    FixedMinimumHeap<Edge> edges(edgesAmountDirected());
+    //przygotowanie struktur pomocniczych
+    while(iterator.hasNext()) {
+        auto& vertex = iterator.next();
+        mst->addVertex(vertex.id);
+        colorMappings[index] = VertexColor(vertex.id, vertex.id);
+        auto edgesIterator = vertex.edges.iterator();
+        //utworzenie kolejki krawędzi
+        while(edgesIterator.hasNext())
+        {
+            auto edge = edgesIterator.next();
+            edges.add(Edge(vertex.id, edge.finalVertex, edge.weight));
+        }
+        index++;
+    }
+
+    while(true) {
+        break;
+    }
+
+
+    return mst;
 }
 
 std::string ListGraph::getRepresentation() {

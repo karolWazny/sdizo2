@@ -21,8 +21,8 @@ public:
 
     virtual PathPointer shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
     virtual PathPointer shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
-    virtual GraphPointer MSTDijkstra() = 0;
-    virtual GraphPointer MSTFB() = 0;
+    virtual GraphPointer MSTPrim() = 0;
+    virtual GraphPointer MSTKruskal() = 0;
 
     virtual std::string getRepresentation() = 0;
 };

@@ -171,11 +171,11 @@ std::string FixedMinimumHeap<T>::getRepresentation() {
     out += "[";
     if(size)
     {
-        out += std::to_string(content[0].weight);
+        out += std::to_string(content[0]);
         for(size_t i = 1; i < size; i++)
         {
             out += ", ";
-            out += std::to_string(content[i].weight);
+            out += std::to_string(content[i]);
         }
     }
     out += "]";

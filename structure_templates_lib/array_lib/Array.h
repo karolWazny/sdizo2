@@ -9,23 +9,23 @@ class Array
 {
 public:
     Array<T>();
-    Array<T>(int initialSize);
-    void putAtPosition(T, const int);
-    void swap(const int, const int);
-    T removeAt(const int index);
+    Array<T>(size_t initialSize);
+    void putAtPosition(T, const size_t);
+    void swap(const size_t, const size_t);
+    T removeAt(const size_t index);
     void pushBack(T);
     bool contains(T element);
     void pushFront(T);
     T removeLast();
     T removeFirst();
-    T get(const int index);
+    T get(const size_t index);
     bool isEmpty();
-    int getLength();
+    size_t getLength();
     std::string toString();
-    T& operator[](int);
+    T& operator[](size_t);
 private:
     std::unique_ptr<T[]> elements;
-    int length;
+    size_t length;
 };
 
 //wyjątek oznaczający żądanie elementu o indeksie niebędącym w tablicy
@@ -72,24 +72,24 @@ void Array<T>::pushFront(T element)
 
 //metoda zwracająca element o danym indeksie przez wartość
 template <typename T>
-T Array<T>::get(const int index)
+T Array<T>::get(const size_t index)
 {
-    if(index >= length || index < 0)
+    if(index >= length)
         throw IndexOutOfBoundException();
     return elements[index];
 }
 
 //metoda do usuwania elementu po indeksie
 template <typename T>
-T Array<T>::removeAt(const int index)
+T Array<T>::removeAt(const size_t index)
 {
     auto buffer = elements[index];
     auto newArray = std::make_unique<T[]>(length - 1);
-    for(int i = 0; i < index; i++)
+    for(size_t i = 0; i < index; i++)
     {
         newArray[i] = elements[i];
     }
-    for(int i = index + 1; i < length; i++)
+    for(size_t i = index + 1; i < length; i++)
     {
         newArray[i-1] = elements[i];
     }
@@ -100,7 +100,7 @@ T Array<T>::removeAt(const int index)
 
 //metoda do zamiany dwóch elementów miejscami
 template<typename T>
-void Array<T>::swap(const int index1, const int index2)
+void Array<T>::swap(const size_t index1, const size_t index2)
 {
     const auto buffer = elements[index1];
     elements[index1] = elements[index2];
@@ -109,18 +109,18 @@ void Array<T>::swap(const int index1, const int index2)
 
 //metoda wstawiająca nowy element na danej pozycji
 template<typename T>
-void Array<T>::putAtPosition(T element, const int index)
+void Array<T>::putAtPosition(T element, const size_t index)
 {
     if(index > length)
     {
         throw IndexOutOfBoundException();
     }
     auto newArray = std::make_unique<T[]>(length + 1);
-    for(int i = 0; i < index; i++)
+    for(size_t i = 0; i < index; i++)
     {
         newArray[i] = elements[i];
     }
-    for(int i = index; i < length; i++)
+    for(size_t i = index; i < length; i++)
     {
         newArray[i+1] = elements[i];
     }
@@ -136,7 +136,7 @@ bool Array<T>::isEmpty()
 }
 
 template <typename T>
-int Array<T>::getLength()
+size_t Array<T>::getLength()
 {
     return length;
 }
@@ -149,7 +149,7 @@ std::string Array<T>::toString()
     {
         output += std::to_string(elements[0]);
     }
-    for(int i = 1; i < length; i++)
+    for(size_t i = 1; i < length; i++)
     {
         output += ", " + std::to_string(elements[i]);
     }
@@ -159,7 +159,7 @@ std::string Array<T>::toString()
 
 template<typename T>
 bool Array<T>::contains(T element) {
-    for(int i = 0; i < length; i++)
+    for(size_t i = 0; i < length; i++)
     {
         if(element == elements[i])
         {
@@ -173,7 +173,7 @@ bool Array<T>::contains(T element) {
 //zaimplementowana aby umożliwić szybsze budowanie struktury
 //z pliku i generowanie dużych tablic do testów
 template<typename T>
-Array<T>::Array(int initialSize) {
+Array<T>::Array(size_t initialSize) {
     length = initialSize;
     elements = std::make_unique<T[]>(initialSize);
 }
@@ -182,8 +182,8 @@ Array<T>::Array(int initialSize) {
 //zwraca obiekt przez referencję, działanie jak
 //ten sam operator dla tablicy
 template<typename T>
-T &Array<T>::operator[](int index) {
-    if(index < 0 || index >= length)
+T &Array<T>::operator[](size_t index) {
+    if(index >= length)
         throw IndexOutOfBoundException();
     return elements[index];
 }

@@ -18,8 +18,8 @@ public:
 
     virtual PathPointer shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex);
     virtual PathPointer shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex);
-    virtual GraphPointer MSTDijkstra();
-    virtual GraphPointer MSTFB();
+    virtual GraphPointer MSTPrim();
+    virtual GraphPointer MSTKruskal();
     std::string getRepresentation() override;
 private:
     LinkedList<ListGraphVertex> vertices;
@@ -39,6 +39,9 @@ struct Edge {
     vertexId_t initialVertex;
     vertexId_t finalVertex;
     int weight;
+    Edge() : initialVertex{0}, finalVertex{0}, weight{0} {};
+    Edge(vertexId_t initial, vertexId_t final, int w) : initialVertex{initial},
+                finalVertex{final}, weight{w} {};
 };
 
 struct ListGraphVertex {
@@ -49,6 +52,14 @@ public:
     LinkedList<ListGraphEdge> edges;
     explicit ListGraphVertex(vertexId_t vertexId) : id{vertexId} {};
     ListGraphVertex() : id{0} {};
+};
+
+struct VertexColor {
+public:
+    vertexId_t id{};
+    vertexId_t color{};
+    VertexColor(vertexId_t vertexId, vertexId_t vertexColor) : id{vertexId}, color{vertexColor} {};
+    VertexColor() : id{0}, color{0} {};
 };
 
 #endif //SDIZO2_LISTGRAPH_H
