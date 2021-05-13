@@ -16,11 +16,13 @@ public:
     size_t getSize();
     std::string getRepresentation();
     void removeWhere(std::function<bool(T)>);
+    void modifyIf(std::function<void(T&)>, std::function<bool(T)>);
 private:
     std::unique_ptr<T[]> content{};
     size_t size{0};
     size_t maxSize;
     void cascadeUp();
+    void cascadeUpFrom(size_t position);
     void cascadeDownFrom(size_t position);
     void swap(size_t position1, size_t position2);
     size_t calculateParentPosition(size_t childPosition);
@@ -28,6 +30,7 @@ private:
     size_t calculateLeftChildPosition(size_t parentPosition);
     size_t calculateRightChildPosition(size_t parentPosition);
     bool removeAtPosition(size_t);
+    void updatePosition(size_t);
 };
 
 template<typename T>
@@ -48,16 +51,7 @@ void FixedMinimumHeap<T>::add(T element) {
 //odbudowanie własności kopca od dołu po dodaniu nowego elementu
 template<typename T>
 void FixedMinimumHeap<T>::cascadeUp() {
-    size_t childPosition = size - 1;
-    size_t parentPosition = calculateParentPosition(childPosition);
-    bool heapPropertyRestored = (content[childPosition] >= content[parentPosition]);
-    while (!heapPropertyRestored)
-    {
-        swap(childPosition, parentPosition);
-        childPosition = parentPosition;
-        parentPosition = calculateParentPosition(childPosition);
-        heapPropertyRestored = (content[childPosition] >= content[parentPosition]);
-    }
+    cascadeUpFrom(size - 1);
 }
 
 //metoda pozwalająca zamienić dwa elementy miejscami
@@ -189,6 +183,40 @@ void FixedMinimumHeap<T>::removeWhere(std::function<bool(T)> decider) {
         {
             removeAtPosition(i);
         }
+    }
+}
+
+template<typename T>
+void FixedMinimumHeap<T>::modifyIf(std::function<void(T &)> modify, std::function<bool(T)> condition) {
+    for(int i = 0; i < size; i++) {
+        if(condition(content[i]))
+        {
+            modify(content[i]);
+            updatePosition(i);
+            break;
+        }
+    }
+}
+
+template<typename T>
+void FixedMinimumHeap<T>::updatePosition(size_t index) {
+    auto parentPosition = calculateParentPosition(index);
+    if(content[parentPosition] > content[index])
+        cascadeUpFrom(index);
+    else
+        cascadeDownFrom(index);
+}
+
+template<typename T>
+void FixedMinimumHeap<T>::cascadeUpFrom(size_t childPosition) {
+    size_t parentPosition = calculateParentPosition(childPosition);
+    bool heapPropertyRestored = (content[childPosition] >= content[parentPosition]);
+    while (!heapPropertyRestored)
+    {
+        swap(childPosition, parentPosition);
+        childPosition = parentPosition;
+        parentPosition = calculateParentPosition(childPosition);
+        heapPropertyRestored = (content[childPosition] >= content[parentPosition]);
     }
 }
 

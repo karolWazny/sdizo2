@@ -16,8 +16,8 @@ public:
     size_t verticesAmount() override;
     size_t edgesAmountDirected() override;
 
-    virtual PathPointer shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex);
-    virtual PathPointer shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex);
+    virtual PathPointer shortestPathDijkstra(vertexId_t initialVertex, vertexId_t finalVertex);
+    virtual PathPointer shortestPathBF(vertexId_t initialVertex, vertexId_t finalVertex);
     virtual GraphPointer MSTPrim();
     virtual GraphPointer MSTKruskal();
     std::string getRepresentation() override;
@@ -60,6 +60,15 @@ public:
     vertexId_t color{};
     VertexColor(vertexId_t vertexId, vertexId_t vertexColor) : id{vertexId}, color{vertexColor} {};
     VertexColor() : id{0}, color{0} {};
+};
+
+struct PathVertex {
+public:
+    vertexId_t id{};
+    vertexId_t parent{INT32_MAX};
+    long long pathLength{INT64_MAX};
+    PathVertex() : id{0} {};
+    PathVertex(vertexId_t vertexId) : id{vertexId} {};
 };
 
 #endif //SDIZO2_LISTGRAPH_H

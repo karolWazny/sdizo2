@@ -19,8 +19,8 @@ public:
     virtual vertexId_t verticesAmount() = 0;
     virtual vertexId_t edgesAmountDirected() = 0;
 
-    virtual PathPointer shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
-    virtual PathPointer shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
+    virtual PathPointer shortestPathDijkstra(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
+    virtual PathPointer shortestPathBF(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
     virtual GraphPointer MSTPrim() = 0;
     virtual GraphPointer MSTKruskal() = 0;
 

@@ -1,5 +1,7 @@
 #include "ListGraph.h"
 
+#include <memory>
+
 bool operator==(const ListGraphVertex& v, const ListGraphVertex& w) {
     return v.id == w.id;
 }
@@ -30,6 +32,22 @@ bool operator>(const Edge& e, const Edge& f) {
 
 bool operator<(const Edge& e, const Edge& f) {
     return e.weight < f.weight;
+}
+
+bool operator>=(const PathVertex& e, const PathVertex& f) {
+    return e.pathLength >= f.pathLength;
+}
+
+bool operator<=(const PathVertex& e, const PathVertex& f) {
+    return e.pathLength <= f.pathLength;
+}
+
+bool operator>(const PathVertex& e, const PathVertex& f) {
+    return e.pathLength > f.pathLength;
+}
+
+bool operator<(const PathVertex& e, const PathVertex& f) {
+    return e.pathLength < f.pathLength;
 }
 
 void ListGraph::addVertex(vertexId_t vertexId) {
@@ -101,11 +119,73 @@ size_t ListGraph::edgesAmountDirected() {
     return sum;
 }
 
-PathPointer ListGraph::shortestPathPrim(vertexId_t initialVertex, vertexId_t finalVertex) {
-    return PathPointer();
+PathPointer ListGraph::shortestPathDijkstra(vertexId_t initialVertex, vertexId_t finalVertex) {
+    //kolejka z wierzchołkami
+    FixedMinimumHeap<PathVertex> pathVertices(verticesAmount());
+    LinkedList<PathVertex> visitedVertices;
+    {
+        auto vertexIterator = vertices.iterator();
+        //zapełnienie kolejki
+        while (vertexIterator.hasNext()) {
+            auto vertex = vertexIterator.next();
+            pathVertices.add(PathVertex(vertex.id));
+        }
+    }
+    pathVertices.modifyIf([](PathVertex& vertex)->void {
+        vertex.pathLength = 0;
+    }, [initialVertex](PathVertex vertex)->bool {
+        return vertex.id == initialVertex;
+    });
+    //relaksacja kolejnych krawędzi
+    while(pathVertices.getSize()) {
+        auto pathVertex = pathVertices.extractRoot();
+        //dodajemy węzeł do zbioru węzłów odwiedzonych
+        visitedVertices.pushFront(pathVertex);
+        auto vertexIterator = vertices.iterator();
+        ListGraphVertex currentVertex;
+        //szukamy w grafie dodawanego węzła, żeby dorwać jego listę krawędzi
+        while(vertexIterator.hasNext()) {
+            currentVertex = vertexIterator.next();
+            if(currentVertex.id == pathVertex.id) {
+                break;
+            }
+        }
+        auto edgeIterator = currentVertex.edges.iterator();
+        //relaksacja krawędzi wychodzących z dodanego wierzchołka
+        while(edgeIterator.hasNext()) {
+            const auto& edge = edgeIterator.next();
+            pathVertices.modifyIf([edge, pathVertex](PathVertex& vertex)->void {
+                if(vertex.pathLength > edge.weight + pathVertex.pathLength) {
+                    vertex.pathLength = edge.weight + pathVertex.pathLength;
+                    vertex.parent = pathVertex.id;
+                }
+            }, [edge](PathVertex vertex)->bool {
+                return edge.finalVertex == vertex.id;
+            });
+        }
+    }
+    //opracowanie konkretnej ścieżki z węzła do węzła
+    //w opraciu o drzewo najkrótszych ścieżek
+    auto path = std::make_shared<Path>();
+    auto recentVertex = finalVertex;
+    while(recentVertex != INT32_MAX) {
+        path->vertices.pushFront(recentVertex);
+        auto iterator = visitedVertices.iterator();
+        while(iterator.hasNext()) {
+            auto vertex = iterator.next();
+            if(vertex.id == recentVertex) {
+                recentVertex = vertex.parent;
+                if(vertex.id == finalVertex) {
+                    path->totalWeight = vertex.pathLength;
+                }
+                break;
+            }
+        }
+    }
+    return path;
 }
 
-PathPointer ListGraph::shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex) {
+PathPointer ListGraph::shortestPathBF(vertexId_t initialVertex, vertexId_t finalVertex) {
     return PathPointer();
 }
 
