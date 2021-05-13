@@ -20,6 +20,7 @@ public:
     virtual PathPointer shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex);
     virtual GraphPointer MSTDijkstra();
     virtual GraphPointer MSTFB();
+    std::string getRepresentation() override;
 private:
     LinkedList<ListGraphVertex> vertices;
     long totalWeight;
@@ -42,6 +43,8 @@ struct Edge {
 
 struct ListGraphVertex {
 public:
+    std::string toString();
+
     vertexId_t id{};
     LinkedList<ListGraphEdge> edges;
     explicit ListGraphVertex(vertexId_t vertexId) : id{vertexId} {};

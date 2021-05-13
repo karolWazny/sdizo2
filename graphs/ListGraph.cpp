@@ -128,25 +128,17 @@ GraphPointer ListGraph::MSTDijkstra() {
                 }
             }
         } else { //dołożenie najlżejszej krawędzi, która nie utworzy cyklu
-            while(true){
-
-                auto edge = edgesToAdd.extractRoot();
-                //jeżeli na drugim końcu rozważanej krawędzi jest wierzchołek,
-                //którego żeśmy jeszcze nie dodali:
-                if(!addedVertices.contains(edge.finalVertex))
+            auto edge = edgesToAdd.extractRoot();
+            auto iterator = vertices.iterator();
+            //znajdujemy dodawany, wierzchołek; przyda się, żeby dodać jego krawędzie wyjściowe do kolejki
+            while(iterator.hasNext())
+            {
+                lastAddedVertex = iterator.next();
+                if(lastAddedVertex.id == edge.finalVertex)
                 {
-                    auto iterator = vertices.iterator();
-                    while(iterator.hasNext())
-                    {
-                        lastAddedVertex = iterator.next();
-                        if(lastAddedVertex.id == edge.finalVertex)
-                        {
-                            tree->addVertex(lastAddedVertex.id);
-                            tree->addEdgeDirected(edge.initialVertex, edge.finalVertex, edge.weight);
-                            tree->addEdgeDirected(edge.finalVertex, edge.initialVertex, edge.weight);
-                            break;
-                        }
-                    }
+                    tree->addVertex(lastAddedVertex.id);
+                    tree->addEdgeDirected(edge.initialVertex, edge.finalVertex, edge.weight);
+                    tree->addEdgeDirected(edge.finalVertex, edge.initialVertex, edge.weight);
                     break;
                 }
             }
@@ -154,6 +146,7 @@ GraphPointer ListGraph::MSTDijkstra() {
         //dodanie nowego wierzchołka do listy dodanych wierzchołków
         addedVertices.put(lastAddedVertex.id);
 
+        //dodajemy krawędzie wyjściowe z nowego wierzchołka do kolejki
         auto iterator = lastAddedVertex.edges.iterator();
         while(iterator.hasNext()) {
             Edge current{};
@@ -164,7 +157,7 @@ GraphPointer ListGraph::MSTDijkstra() {
 
             edgesToAdd.add(current);
         }
-
+        //usuwamy krawędzie, których dodanie powodowałoby powstanie cyklu
         edgesToAdd.removeWhere([addedVertices](Edge edge) {return addedVertices.contains(edge.finalVertex);});
     }
 
@@ -175,4 +168,37 @@ GraphPointer ListGraph::MSTDijkstra() {
 
 GraphPointer ListGraph::MSTFB() {
     return GraphPointer();
+}
+
+std::string ListGraph::getRepresentation() {
+    std::string output = "[ \n";
+    auto vertexIterator = vertices.iterator();
+    while(vertexIterator.hasNext())
+    {
+        auto vertex = vertexIterator.next();
+        output += "\t";
+        output += vertex.toString();
+        output += "\n";
+    }
+    output += "]";
+    return output;
+}
+
+std::string ListGraphVertex::toString() {
+    std::string output = "ID: ";
+    output += std::to_string(id);
+    output += " -> [";
+    auto iterator = edges.iterator();
+    while(iterator.hasNext())
+    {
+        auto edge = iterator.next();
+        output += std::to_string(edge.finalVertex);
+        output += "(";
+        output += std::to_string(edge.weight);
+        output += ")";
+        if(iterator.hasNext())
+            output += ", ";
+    }
+    output += "]";
+    return output;
 }

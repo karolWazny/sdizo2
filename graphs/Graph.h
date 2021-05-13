@@ -2,6 +2,7 @@
 #define SDIZO2_GRAPH_H
 
 #include <memory>
+#include <string>
 #include "Path.h"
 
 class Graph;
@@ -22,6 +23,8 @@ public:
     virtual PathPointer shortestPathKruskal(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
     virtual GraphPointer MSTDijkstra() = 0;
     virtual GraphPointer MSTFB() = 0;
+
+    virtual std::string getRepresentation() = 0;
 };
 
 #endif //SDIZO2_GRAPH_H

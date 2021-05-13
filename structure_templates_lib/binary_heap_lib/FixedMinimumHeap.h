@@ -71,11 +71,9 @@ void FixedMinimumHeap<T>::swap(const size_t position1, const size_t position2) {
 //metoda obliczająca indeks rodzica danego elementu w tablicy
 template<typename T>
 size_t FixedMinimumHeap<T>::calculateParentPosition(const size_t childPosition) {
+    if(childPosition == 0)
+        return 0;
     size_t parentPosition = (childPosition - 1) >> 1;
-    if(parentPosition < 0)
-    {
-        parentPosition = 0;
-    }
     return parentPosition;
 }
 
@@ -130,21 +128,21 @@ template<typename T>
 void FixedMinimumHeap<T>::cascadeDownFrom(const size_t position) {
     size_t rightChildPosition = calculateRightChildPosition(position);
     size_t leftChildPosition = calculateLeftChildPosition(position);
-    size_t biggerChildPosition;
+    size_t smallerChildPosition;
     if(leftChildPosition >= size)
     {
         return;
     }
     if(rightChildPosition >= size)
     {
-        biggerChildPosition = leftChildPosition;
+        smallerChildPosition = leftChildPosition;
     } else {
-        biggerChildPosition = (content[leftChildPosition] > content[rightChildPosition] ? leftChildPosition : rightChildPosition);
+        smallerChildPosition = (content[leftChildPosition] < content[rightChildPosition] ? leftChildPosition : rightChildPosition);
     }
-    if(content[biggerChildPosition] > content[position])
+    if(content[smallerChildPosition] < content[position])
     {
-        swap(biggerChildPosition, position);
-        cascadeDownFrom(biggerChildPosition);
+        swap(smallerChildPosition, position);
+        cascadeDownFrom(smallerChildPosition);
     }
 }
 //zwraca wartosc elementu w korzeniu
@@ -173,11 +171,11 @@ std::string FixedMinimumHeap<T>::getRepresentation() {
     out += "[";
     if(size)
     {
-        out += std::to_string(content[0]);
+        out += std::to_string(content[0].weight);
         for(size_t i = 1; i < size; i++)
         {
             out += ", ";
-            out += std::to_string(content[i]);
+            out += std::to_string(content[i].weight);
         }
     }
     out += "]";
