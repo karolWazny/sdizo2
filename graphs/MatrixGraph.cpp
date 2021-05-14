@@ -10,7 +10,7 @@ void MatrixGraph::addVertex(vertexId_t vertexId) {
     //jeżeli nie mamy, to dodajemy
     MatrixGraphVertex ver;
     ver.id = vertexId;
-    ver.incidences = Array<Incidence>(numberOfEdges);
+    ver.incidences = Array<Incidence>(weights.getLength());
     ver.incidences.forEach([](Incidence& incidence)->bool{
         incidence = Incidence::NONE;
         return false;
@@ -25,7 +25,7 @@ void MatrixGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVert
         //operacja zakończy się cichum niepowodzeniem
         auto& initVer = vertexWithId(initialVertex);
         auto& finVer = vertexWithId(finalVertex);
-        for(size_t i = 0; i < numberOfEdges; i++) {
+        for(size_t i = 0; i < edgesAmount(); i++) {
             //jeżeli taka krawędź już istnieje, tylko aktualizujemy jej wagę
             if(initVer.incidences[i] == Incidence::OUT && finVer.incidences[i] != Incidence::NONE) {
                 weights[i] = weight;
@@ -43,14 +43,29 @@ void MatrixGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVert
         initVer.incidences.pushBack(Incidence::OUT);
         finVer.incidences.pushBack(Incidence::IN);
         weights.pushBack(weight);
-        numberOfEdges++;
     } catch (std::exception& exception) {
         //ciche niepowodzenie
     }
 }
 
 void MatrixGraph::removeVertex(vertexId_t vertexId) {
-
+    auto vertexIterator = vertices.iterator();
+    while(vertexIterator.hasNext()) {
+        auto& vertex = vertexIterator.next();
+        if(vertex.id == vertexId) {
+            for(auto i = edgesAmount(); i > 0; i--) {
+                if(vertex.incidences[i - 1] != Incidence::NONE) {
+                    weights.removeAt(i - 1);
+                    vertices.forEach([i](MatrixGraphVertex& ver)->bool{
+                        ver.incidences.removeAt(i - 1);
+                        return false;
+                    });
+                }
+            }
+            vertexIterator.remove();
+            break;
+        }
+    }
 }
 
 void MatrixGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) {
@@ -60,7 +75,7 @@ void MatrixGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalV
         //operacja zakończy się cichum niepowodzeniem
         auto& initVer = vertexWithId(initialVertex);
         auto& finVer = vertexWithId(finalVertex);
-        for(size_t i = 0; i < numberOfEdges; i++) {
+        for(size_t i = 0; i < edgesAmount(); i++) {
             //sprawdzamy, czy taka krawędź istnieje
             if(initVer.incidences[i] == Incidence::OUT) {
                 //jeżeli ta krawędź jest skierowana
@@ -72,7 +87,6 @@ void MatrixGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalV
                         ver.incidences.removeAt(i);
                     }
                     weights.removeAt(i);
-                    numberOfEdges--;
                     return;
                 } else if(finVer.incidences[i] == Incidence::OUT) {
                     // jeżeli krawędź była nieskierowana, zamienia się
@@ -94,7 +108,7 @@ vertexId_t MatrixGraph::verticesAmount() {
 }
 
 vertexId_t MatrixGraph::edgesAmount() {
-    return numberOfEdges;
+    return weights.getLength();
 }
 
 PathPointer MatrixGraph::shortestPathDijkstra(vertexId_t initialVertex, vertexId_t finalVertex) {

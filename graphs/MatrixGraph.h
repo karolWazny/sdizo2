@@ -28,7 +28,6 @@ private:
 
     LinkedList<MatrixGraphVertex> vertices;
     Array<int> weights;
-    size_t numberOfEdges{0};
 };
 
 enum Incidence : char {

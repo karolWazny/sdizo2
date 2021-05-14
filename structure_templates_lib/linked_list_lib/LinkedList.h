@@ -4,6 +4,7 @@
 #include "LinkedListItem.h"
 #include "ListIterator.h"
 #include <string>
+#include <functional>
 
 //szablon klasy listy podwójnie wiązanej
 template <typename type>
@@ -12,6 +13,7 @@ class LinkedList
     friend ListIterator<type>;
 public:
     ListIterator<type> iterator();
+    size_t forEach(std::function<bool(type&)>);
     int firstIndexOf(type element);
     bool contains(type element);
     void addAtPosition(type, int);
@@ -337,6 +339,18 @@ int LinkedList<type>::firstIndexOf(type element) {
 template<typename type>
 ListIterator<type> LinkedList<type>::iterator() {
     return ListIterator<type>(this, guard);
+}
+
+template<typename type>
+size_t LinkedList<type>::forEach(std::function<bool(type &)> function) {
+    auto iter = iterator();
+    size_t count{};
+    while(iter.hasNext()) {
+        type& element = iter.next();
+        if(function(element))
+            count++;
+    }
+    return count;
 }
 
 #endif //SDIZO_1_LINKEDLIST_H
