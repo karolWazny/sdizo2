@@ -54,7 +54,39 @@ void MatrixGraph::removeVertex(vertexId_t vertexId) {
 }
 
 void MatrixGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) {
-
+    try {
+        //jeżeli przynajmniej jeden z wierzchołków nie istnieje,
+        //wyszukanie rzuci wyjątkiem, który złapiemy;
+        //operacja zakończy się cichum niepowodzeniem
+        auto& initVer = vertexWithId(initialVertex);
+        auto& finVer = vertexWithId(finalVertex);
+        for(size_t i = 0; i < numberOfEdges; i++) {
+            //sprawdzamy, czy taka krawędź istnieje
+            if(initVer.incidences[i] == Incidence::OUT) {
+                //jeżeli ta krawędź jest skierowana
+                //to ją usuwamy całkiem
+                if(finVer.incidences[i] == Incidence::IN){
+                    auto iterator = vertices.iterator();
+                    while(iterator.hasNext()){
+                        auto& ver = iterator.next();
+                        ver.incidences.removeAt(i);
+                    }
+                    weights.removeAt(i);
+                    numberOfEdges--;
+                    return;
+                } else if(finVer.incidences[i] == Incidence::OUT) {
+                    // jeżeli krawędź była nieskierowana, zamienia się
+                    // w skierowaną;
+                    // ten feature służy głównie ujednoliceniu
+                    // zachowania z ListGraphem
+                    initVer.incidences[i] = Incidence::IN;
+                    return;
+                }
+            }
+        }
+    } catch (std::exception& exception) {
+        //ciche niepowodzenie
+    }
 }
 
 vertexId_t MatrixGraph::verticesAmount() {

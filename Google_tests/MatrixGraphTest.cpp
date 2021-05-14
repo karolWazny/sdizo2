@@ -113,7 +113,6 @@ TEST(MatrixGraphSuite, RemoveEdge){
     ASSERT_EQ(graph.edgesAmount(), 0);
 }
 
-/*
 TEST(MatrixGraphSuite, RemoveVertex){
     auto graph = MatrixGraph();
     graph.addVertex(0);
@@ -126,6 +125,7 @@ TEST(MatrixGraphSuite, RemoveVertex){
     ASSERT_EQ(graph.verticesAmount(), 2);
 }
 
+/*
 TEST(MatrixGraphSuite, Prim){
     auto graph = MatrixGraph();
     graph.addVertex(0);
