@@ -6,11 +6,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(HEADER_FILES
         Graph.h
         Path.h
-        ListGraph.h)
+        ListGraph.h
+        MatrixGraph.h)
 
 set(SOURCE_FILES
         Path.cpp
-        ListGraph.cpp)
+        ListGraph.cpp
+        MatrixGraph.cpp)
 
 link_libraries(structure_templates_lib)
 
