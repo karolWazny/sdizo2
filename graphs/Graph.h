@@ -19,7 +19,7 @@ public:
     virtual void removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
     virtual void removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
     virtual vertexId_t verticesAmount() = 0;
-    virtual vertexId_t edgesAmountDirected() = 0;
+    virtual vertexId_t edgesAmount() = 0;
 
     virtual PathPointer shortestPathDijkstra(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
     virtual PathPointer shortestPathBF(vertexId_t initialVertex, vertexId_t finalVertex) = 0;

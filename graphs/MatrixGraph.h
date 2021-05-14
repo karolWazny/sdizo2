@@ -14,7 +14,7 @@ public:
     void removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) override;
     void removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) override;
     size_t verticesAmount() override;
-    size_t edgesAmountDirected() override;
+    size_t edgesAmount() override;
 
     PathPointer shortestPathDijkstra(vertexId_t initialVertex, vertexId_t finalVertex) override;
     PathPointer shortestPathBF(vertexId_t initialVertex, vertexId_t finalVertex) override;
@@ -24,15 +24,17 @@ public:
     std::string getRepresentation() override;
 
 private:
+    MatrixGraphVertex& vertexWithId(vertexId_t id);
+
     LinkedList<MatrixGraphVertex> vertices;
     Array<int> weights;
+    size_t numberOfEdges{0};
 };
 
 enum Incidence : char {
-    NONE,
-    IN,
-    OUT,
-    BOTH
+    NONE = 0,
+    IN = 1,
+    OUT = 2,
 };
 
 struct MatrixGraphVertex {

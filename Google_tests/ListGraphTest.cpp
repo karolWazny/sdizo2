@@ -44,34 +44,34 @@ ListGraph testInstance(){
 
 TEST(ListGraphSuite, AddVertex){
     auto graph = ListGraph();
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 0);
     graph.addVertex(0);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 1);
     graph.addVertex(1);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 2);
     graph.addVertex(2);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 3);
 }
 
 TEST(ListGraphSuite, AddVertexUniqueId){
     auto graph = ListGraph();
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 0);
     graph.addVertex(0);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 1);
     graph.addVertex(0);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 1);
     graph.addVertex(1);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 2);
     graph.addVertex(1);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 2);
 }
 
@@ -80,9 +80,9 @@ TEST(ListGraphSuite, AddEdge){
     graph.addVertex(0);
     graph.addVertex(1);
     graph.addVertex(2);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     graph.addEdgeDirected(0, 2, 8);
-    ASSERT_EQ(graph.edgesAmountDirected(), 1);
+    ASSERT_EQ(graph.edgesAmount(), 1);
 }
 
 TEST(ListGraphSuite, RemoveEdge){
@@ -90,11 +90,11 @@ TEST(ListGraphSuite, RemoveEdge){
     graph.addVertex(0);
     graph.addVertex(1);
     graph.addVertex(2);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     graph.addEdgeDirected(0, 2, 8);
-    ASSERT_EQ(graph.edgesAmountDirected(), 1);
+    ASSERT_EQ(graph.edgesAmount(), 1);
     graph.removeEdgeDirected(0, 2);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
 }
 
 TEST(ListGraphSuite, RemoveVertex){
@@ -103,9 +103,9 @@ TEST(ListGraphSuite, RemoveVertex){
     graph.addVertex(1);
     graph.addVertex(2);
     graph.addEdgeDirected(0, 2, 8);
-    ASSERT_EQ(graph.edgesAmountDirected(), 1);
+    ASSERT_EQ(graph.edgesAmount(), 1);
     graph.removeVertex(2);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 2);
 }
 
@@ -115,12 +115,12 @@ TEST(ListGraphSuite, Prim){
     graph.addVertex(1);
     graph.addVertex(2);
     graph.addEdgeDirected(0, 2, 8);
-    ASSERT_EQ(graph.edgesAmountDirected(), 1);
+    ASSERT_EQ(graph.edgesAmount(), 1);
     graph.removeVertex(2);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 2);
     auto mst = graph.MSTPrim();
-    ASSERT_EQ(mst->edgesAmountDirected(), 0);
+    ASSERT_EQ(mst->edgesAmount(), 0);
     ASSERT_EQ(mst->verticesAmount(), 2);
 }
 
@@ -132,14 +132,14 @@ TEST(ListGraphSuite, Prim2){
     graph.addEdgeDirected(0, 2, 8);
     graph.addEdgeDirected(2, 0, 8);
     auto mst = graph.MSTPrim();
-    ASSERT_EQ(mst->edgesAmountDirected(), 2);
+    ASSERT_EQ(mst->edgesAmount(), 2);
     ASSERT_EQ(mst->verticesAmount(), 3);
 }
 
 TEST(ListGraphSuite, PrimFullTestCase){
     auto graph = testInstance();
     auto mst = graph.MSTPrim();
-    ASSERT_EQ(mst->edgesAmountDirected(), 14);
+    ASSERT_EQ(mst->edgesAmount(), 14);
     ASSERT_EQ(mst->verticesAmount(), 8);
 }
 
@@ -149,12 +149,12 @@ TEST(ListGraphSuite, Kruskal){
     graph.addVertex(1);
     graph.addVertex(2);
     graph.addEdgeDirected(0, 2, 8);
-    ASSERT_EQ(graph.edgesAmountDirected(), 1);
+    ASSERT_EQ(graph.edgesAmount(), 1);
     graph.removeVertex(2);
-    ASSERT_EQ(graph.edgesAmountDirected(), 0);
+    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 2);
     auto mst = graph.MSTKruskal();
-    ASSERT_EQ(mst->edgesAmountDirected(), 0);
+    ASSERT_EQ(mst->edgesAmount(), 0);
     ASSERT_EQ(mst->verticesAmount(), 2);
 }
 
@@ -166,7 +166,7 @@ TEST(ListGraphSuite, Kruskal2){
     graph.addEdgeDirected(0, 2, 8);
     graph.addEdgeDirected(2, 0, 8);
     auto mst = graph.MSTKruskal();
-    ASSERT_EQ(mst->edgesAmountDirected(), 2);
+    ASSERT_EQ(mst->edgesAmount(), 2);
     ASSERT_EQ(mst->verticesAmount(), 3);
 }
 
@@ -174,7 +174,7 @@ TEST(ListGraphSuite, KruskalFullTestCase){
     auto graph = testInstance();
 
     auto mst = graph.MSTKruskal();
-    ASSERT_EQ(mst->edgesAmountDirected(), 14);
+    ASSERT_EQ(mst->edgesAmount(), 14);
     ASSERT_EQ(mst->verticesAmount(), 8);
 }
 

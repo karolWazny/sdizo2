@@ -109,7 +109,7 @@ size_t ListGraph::verticesAmount() {
     return vertices.getLength();
 }
 
-size_t ListGraph::edgesAmountDirected() {
+size_t ListGraph::edgesAmount() {
     size_t sum = 0;
     auto iterator = this->vertices.iterator();
     while(iterator.hasNext())
@@ -272,7 +272,7 @@ GraphPointer ListGraph::MSTPrim() {
     //drzewo zawierające identyfikatory już dodanych wierzchołków
     rbtree<vertexId_t> addedVertices;
     //kolejka krawędzi wychodzących z wierzchołków już dodanych
-    FixedMinimumHeap<Edge> edgesToAdd(edgesAmountDirected());
+    FixedMinimumHeap<Edge> edgesToAdd(edgesAmount());
     ListGraphVertex lastAddedVertex;
     while(tree->verticesAmount() < this->verticesAmount()) {
         //wybór kolejnego wierzchołka do dodania
@@ -332,7 +332,7 @@ GraphPointer ListGraph::MSTKruskal() {
     auto iterator = vertices.iterator();
     size_t index = 0;
     Array<VertexColor> colorMappings(verticesAmount());
-    FixedMinimumHeap<Edge> edges(edgesAmountDirected());
+    FixedMinimumHeap<Edge> edges(edgesAmount());
     //przygotowanie struktur pomocniczych
     while(iterator.hasNext()) {
         auto& vertex = iterator.next();
