@@ -43,3 +43,11 @@ GraphPointer MatrixGraph::MSTKruskal() {
 std::string MatrixGraph::getRepresentation() {
     return std::string();
 }
+
+void MatrixGraph::addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
+
+}
+
+void MatrixGraph::removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) {
+
+}

@@ -405,6 +405,16 @@ ListIterator<ListGraphEdge> ListGraph::edgesFromVertex(vertexId_t vertexId) {
     throw std::exception();
 }
 
+void ListGraph::addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
+    addEdgeDirected(initialVertex, finalVertex, weight);
+    addEdgeDirected(finalVertex, initialVertex, weight);
+}
+
+void ListGraph::removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) {
+    removeEdgeDirected(initialVertex, finalVertex);
+    removeEdgeDirected(finalVertex, initialVertex);
+}
+
 std::string ListGraphVertex::toString() {
     std::string output = "ID: ";
     output += std::to_string(id);
