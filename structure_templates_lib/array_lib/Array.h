@@ -87,7 +87,7 @@ template <typename T>
 T Array<T>::removeAt(const size_t index)
 {
     auto buffer = elements[index];
-    auto newArray = std::make_shared<T[]>(length - 1);
+    auto newArray = std::shared_ptr<T[]>(new T[length - 1]);
     for(size_t i = 0; i < index; i++)
     {
         newArray[i] = elements[i];
@@ -118,7 +118,7 @@ void Array<T>::putAtPosition(T element, const size_t index)
     {
         throw IndexOutOfBoundException();
     }
-    auto newArray = std::make_shared<T[]>(length + 1);
+    auto newArray = std::shared_ptr<T[]>(new T[length + 1]);
     for(size_t i = 0; i < index; i++)
     {
         newArray[i] = elements[i];
