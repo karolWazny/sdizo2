@@ -205,3 +205,35 @@ TEST(ListGraphSuite, Dijkstra2) {
     auto path = graph.shortestPathDijkstra(2, 3);
     ASSERT_EQ(path->totalWeight, 17);
 }
+
+TEST(ListGraphSuite, BelmanFord) {
+    auto graph = testInstance();
+    auto path = graph.shortestPathBF(0, 7);
+    ASSERT_EQ(path->totalWeight, 16);
+}
+
+TEST(ListGraphSuite, BelmanFord3) {
+    auto graph = testInstance();
+    auto path = graph.shortestPathBF(7, 0);
+    ASSERT_EQ(path->totalWeight, 16);
+}
+
+TEST(ListGraphSuite, BelmanFord2) {
+    auto graph = testInstance();
+    auto path = graph.shortestPathBF(2, 3);
+    ASSERT_EQ(path->totalWeight, 17);
+}
+
+TEST(ListGraphSuite, ShortestPathCountOff) {
+    auto graph = testInstance();
+    for(int i = 0; i < 8; i++) {
+        for(int k = 0; k < 8; k++) {
+            ASSERT_EQ(graph.shortestPathDijkstra(i, k)->totalWeight,
+                      graph.shortestPathDijkstra(k, i)->totalWeight);
+            ASSERT_EQ(graph.shortestPathBF(i, k)->totalWeight,
+                      graph.shortestPathBF(k, i)->totalWeight);
+            ASSERT_EQ(graph.shortestPathBF(i, k)->totalWeight,
+                      graph.shortestPathDijkstra(i, k)->totalWeight);
+        }
+    }
+}

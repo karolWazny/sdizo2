@@ -2,6 +2,7 @@
 #define SDIZO_1_ARRAY_H
 #include <memory>
 #include <string>
+#include <functional>
 
 //szablon klasy implementującej tablicę dynamiczną
 template <typename T>
@@ -23,6 +24,8 @@ public:
     size_t getLength();
     std::string toString();
     T& operator[](size_t);
+    size_t forEach(std::function<bool(T&)>);
+    T& find(std::function<bool(T)> condition);
 private:
     std::unique_ptr<T[]> elements;
     size_t length;
@@ -186,6 +189,25 @@ T &Array<T>::operator[](size_t index) {
     if(index >= length)
         throw IndexOutOfBoundException();
     return elements[index];
+}
+
+template<typename T>
+size_t Array<T>::forEach(std::function<bool(T &)> function) {
+    size_t count{};
+    for(size_t i = 0; i < length; i++) {
+        if(function(elements[i]))
+            count++;
+    }
+    return count;
+}
+
+template<typename T>
+T &Array<T>::find(std::function<bool(T)> condition) {
+    for(size_t i = 0; i < length; i++) {
+        if(condition(elements[i]))
+            return elements[i];
+    }
+    throw std::exception();
 }
 
 #endif //SDIZO_1_ARRAY_H

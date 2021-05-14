@@ -22,6 +22,8 @@ public:
     virtual GraphPointer MSTKruskal();
     std::string getRepresentation() override;
 private:
+    ListIterator<ListGraphEdge> edgesFromVertex(vertexId_t vertexId);
+
     LinkedList<ListGraphVertex> vertices;
     long totalWeight;
 };
