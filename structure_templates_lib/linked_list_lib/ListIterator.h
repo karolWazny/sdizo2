@@ -33,9 +33,9 @@ T &ListIterator<T>::next() {
 
 template<typename T>
 void ListIterator<T>::remove() {
-    bool isLast = !current->hasnext();
+    bool isLast = !current->hasNext();
     if(isLast) {
-        owningList->lasteIndex = current->getPrevious();
+        owningList->lastIndex = current->getPrevious();
     }
     current->remove();
     owningList->length--;
