@@ -27,7 +27,7 @@ public:
     size_t forEach(std::function<bool(T&)>);
     T& find(std::function<bool(T)> condition);
 private:
-    std::unique_ptr<T[]> elements;
+    std::shared_ptr<T[]> elements;
     size_t length;
 };
 
@@ -42,7 +42,7 @@ template <typename T>
 Array<T>::Array()
 {
     length = 0;
-    elements = std::make_unique<T[]>(length);
+    elements = std::shared_ptr<T[]>(new T[length]);
 }
 
 //metoda do dodania elementu na końcu
@@ -87,7 +87,7 @@ template <typename T>
 T Array<T>::removeAt(const size_t index)
 {
     auto buffer = elements[index];
-    auto newArray = std::make_unique<T[]>(length - 1);
+    auto newArray = std::make_shared<T[]>(length - 1);
     for(size_t i = 0; i < index; i++)
     {
         newArray[i] = elements[i];
@@ -96,7 +96,7 @@ T Array<T>::removeAt(const size_t index)
     {
         newArray[i-1] = elements[i];
     }
-    elements = std::move(newArray);
+    elements = newArray;
     length--;
     return buffer;
 }
@@ -118,7 +118,7 @@ void Array<T>::putAtPosition(T element, const size_t index)
     {
         throw IndexOutOfBoundException();
     }
-    auto newArray = std::make_unique<T[]>(length + 1);
+    auto newArray = std::make_shared<T[]>(length + 1);
     for(size_t i = 0; i < index; i++)
     {
         newArray[i] = elements[i];
@@ -178,7 +178,7 @@ bool Array<T>::contains(T element) {
 template<typename T>
 Array<T>::Array(size_t initialSize) {
     length = initialSize;
-    elements = std::make_unique<T[]>(initialSize);
+    elements = std::shared_ptr<T[]>(new T[initialSize]);
 }
 
 //operator dostępu do elementu po indeksie;
