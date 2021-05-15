@@ -10,16 +10,6 @@ bool operator==(const ListGraphEdge& e, const ListGraphEdge& f) {
     return e.finalVertex == f.finalVertex;
 }
 
-void ListGraph::addVertex(vertexId_t vertexId) {
-    /*auto vertex = ListGraphVertex(vertexId);
-    if(vertices.contains(vertex))
-    {
-        //do nothing
-    } else {
-        vertices.pushBack(vertex);
-    }*/
-}
-
 void ListGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
     if(finalVertex >= verticesAmount())
         return; //ciche niepowodzenie, jeżeli drugi wierzchołek nie istnieje w grafie
@@ -35,16 +25,6 @@ void ListGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex
     } catch (std::exception& exception) {
 
     }
-}
-
-void ListGraph::removeVertex(vertexId_t vertexId) {
-    /*auto iterator = this->vertices.iterator();
-    while(iterator.hasNext())
-    {
-        auto &currentVertex = iterator.next();
-        currentVertex.edges.remove((ListGraphEdge)vertexId);
-    }
-    this->vertices.remove((ListGraphVertex) vertexId);*/
 }
 
 void ListGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) {
@@ -219,7 +199,6 @@ GraphPointer ListGraph::MSTPrim() {
                 if(!addedVertices.contains(i))
                 {
                     lastAddedVertex = i;
-                    tree->addVertex(i);
                     treeVerticesAmount++;
                     break;
                 }

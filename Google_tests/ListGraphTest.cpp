@@ -3,10 +3,6 @@
 
 ListGraph testInstance(){
     auto graph = ListGraph(8);
-    for(int i = 0; i < 8; i++)
-    {
-        graph.addVertex(i);
-    }
     graph.addEdgeUndirected(0, 7, 16);
 
     graph.addEdgeUndirected(4, 5, 35);
@@ -60,8 +56,6 @@ TEST(ListGraphSuite, RemoveEdge){
 
 TEST(ListGraphSuite, Prim){
     auto graph = ListGraph(2);
-    graph.addVertex(0);
-    graph.addVertex(1);
     ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 2);
     auto mst = graph.MSTPrim();

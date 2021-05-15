@@ -1,23 +1,5 @@
 #include "MatrixGraph.h"
 
-void MatrixGraph::addVertex(vertexId_t vertexId) {/*
-    //sprawdzamy, czy nie mamy już takiego wierzchołka
-    auto iterator = vertices.iterator();
-    while(iterator.hasNext()) {
-        if(iterator.next().id == vertexId)
-            return;
-    }
-    //jeżeli nie mamy, to dodajemy
-    MatrixGraphVertex ver;
-    ver.id = vertexId;
-    ver.incidences = Array<Incidence>(weights.getLength());
-    ver.incidences.forEach([](Incidence& incidence)->bool{
-        incidence = Incidence::NONE;
-        return false;
-    });
-    vertices.pushBack(ver);*/
-}
-
 void MatrixGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
     try {
         //jeżeli przynajmniej jeden z wierzchołków nie istnieje,
@@ -45,26 +27,6 @@ void MatrixGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVert
     } catch (std::exception& exception) {
         //ciche niepowodzenie
     }
-}
-
-void MatrixGraph::removeVertex(vertexId_t vertexId) {
-    /*auto vertexIterator = vertices.iterator();
-    while(vertexIterator.hasNext()) {
-        auto& vertex = vertexIterator.next();
-        if(vertex.id == vertexId) {
-            for(auto i = edgesAmount(); i > 0; i--) {
-                if(vertex.incidences[i - 1] != Incidence::NONE) {
-                    weights.removeAt(i - 1);
-                    vertices.forEach([i](MatrixGraphVertex& ver)->bool{
-                        ver.incidences.removeAt(i - 1);
-                        return false;
-                    });
-                }
-            }
-            vertexIterator.remove();
-            break;
-        }
-    }*/
 }
 
 void MatrixGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) {

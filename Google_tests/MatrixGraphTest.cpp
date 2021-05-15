@@ -4,10 +4,6 @@
 MatrixGraph testInstance(){
     auto graph = MatrixGraph(8);
 
-    for(int i = 0; i < 8; i++) {
-        graph.addVertex(i);
-    };
-
     graph.addEdgeDirected(0, 7, 16);
     graph.addEdgeDirected(7, 0, 16);
 
@@ -77,8 +73,6 @@ TEST(MatrixGraphSuite, RemoveEdge){
 
 TEST(MatrixGraphSuite, Prim){
     auto graph = MatrixGraph(2);
-    graph.addVertex(0);
-    graph.addVertex(1);
     ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 2);
     auto mst = graph.MSTPrim();
@@ -97,9 +91,6 @@ TEST(MatrixGraphSuite, Prim2){
 
 TEST(MatrixGraphSuite, Prim3){
     auto graph = MatrixGraph(3);
-    graph.addVertex(0);
-    graph.addVertex(1);
-    graph.addVertex(2);
     graph.addEdgeUndirected(0, 2, 8);
     auto mst = graph.MSTPrim();
     ASSERT_EQ(mst->edgesAmount(), 1);
