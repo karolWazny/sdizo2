@@ -10,46 +10,6 @@ bool operator==(const ListGraphEdge& e, const ListGraphEdge& f) {
     return e.finalVertex == f.finalVertex;
 }
 
-bool operator==(const Edge& e, const Edge& f) {
-    return e.finalVertex == f.finalVertex && e.initialVertex == f.initialVertex;
-}
-
-bool operator==(VertexColor v, VertexColor f) {
-    return f.id == v.id;
-}
-
-bool operator>=(const Edge& e, const Edge& f) {
-    return e.weight >= f.weight;
-}
-
-bool operator<=(const Edge& e, const Edge& f) {
-    return e.weight <= f.weight;
-}
-
-bool operator>(const Edge& e, const Edge& f) {
-    return e.weight > f.weight;
-}
-
-bool operator<(const Edge& e, const Edge& f) {
-    return e.weight < f.weight;
-}
-
-bool operator>=(const PathVertex& e, const PathVertex& f) {
-    return e.pathLength >= f.pathLength;
-}
-
-bool operator<=(const PathVertex& e, const PathVertex& f) {
-    return e.pathLength <= f.pathLength;
-}
-
-bool operator>(const PathVertex& e, const PathVertex& f) {
-    return e.pathLength > f.pathLength;
-}
-
-bool operator<(const PathVertex& e, const PathVertex& f) {
-    return e.pathLength < f.pathLength;
-}
-
 void ListGraph::addVertex(vertexId_t vertexId) {
     auto vertex = ListGraphVertex(vertexId);
     if(vertices.contains(vertex))

@@ -12,7 +12,8 @@ set(HEADER_FILES
 set(SOURCE_FILES
         Path.cpp
         ListGraph.cpp
-        MatrixGraph.cpp)
+        MatrixGraph.cpp
+        Graph.cpp)
 
 link_libraries(structure_templates_lib)
 

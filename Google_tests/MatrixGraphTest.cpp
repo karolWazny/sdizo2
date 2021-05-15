@@ -125,13 +125,12 @@ TEST(MatrixGraphSuite, RemoveVertex){
     ASSERT_EQ(graph.verticesAmount(), 2);
 }
 
-/*
 TEST(MatrixGraphSuite, Prim){
     auto graph = MatrixGraph();
     graph.addVertex(0);
     graph.addVertex(1);
     graph.addVertex(2);
-    graph.addEdgeDirected(0, 2, 8);
+    graph.addEdgeUndirected(0, 2, 8);
     ASSERT_EQ(graph.edgesAmount(), 1);
     graph.removeVertex(2);
     ASSERT_EQ(graph.edgesAmount(), 0);
@@ -146,17 +145,27 @@ TEST(MatrixGraphSuite, Prim2){
     graph.addVertex(0);
     graph.addVertex(1);
     graph.addVertex(2);
-    graph.addEdgeDirected(0, 2, 8);
-    graph.addEdgeDirected(2, 0, 8);
+    graph.addEdgeUndirected(0, 2, 8);
     auto mst = graph.MSTPrim();
-    ASSERT_EQ(mst->edgesAmount(), 2);
+    ASSERT_EQ(mst->edgesAmount(), 1);
+    ASSERT_EQ(mst->verticesAmount(), 3);
+}
+
+TEST(MatrixGraphSuite, Prim3){
+    auto graph = MatrixGraph();
+    graph.addVertex(0);
+    graph.addVertex(1);
+    graph.addVertex(2);
+    graph.addEdgeUndirected(0, 2, 8);
+    auto mst = graph.MSTPrim();
+    ASSERT_EQ(mst->edgesAmount(), 1);
     ASSERT_EQ(mst->verticesAmount(), 3);
 }
 
 TEST(MatrixGraphSuite, PrimFullTestCase){
     auto graph = testInstance();
     auto mst = graph.MSTPrim();
-    ASSERT_EQ(mst->edgesAmount(), 14);
+    ASSERT_EQ(mst->edgesAmount(), 7);
     ASSERT_EQ(mst->verticesAmount(), 8);
 }
 
@@ -195,7 +204,7 @@ TEST(MatrixGraphSuite, KruskalFullTestCase){
     ASSERT_EQ(mst->verticesAmount(), 8);
 }
 
-TEST(MatrixGraphSuite, Dijkstra) {
+/*TEST(MatrixGraphSuite, Dijkstra) {
     auto graph = testInstance();
     auto path = graph.shortestPathDijkstra(0, 7);
     ASSERT_EQ(path->totalWeight, 16);
@@ -237,5 +246,4 @@ TEST(MatrixGraphSuite, ShortestPathCountOff) {
                       graph.shortestPathDijkstra(i, k)->totalWeight);
         }
     }
-}
-*/
+}*/
