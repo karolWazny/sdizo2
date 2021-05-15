@@ -215,7 +215,6 @@ TEST(MatrixGraphSuite, Dijkstra2) {
     ASSERT_EQ(path->totalWeight, 17);
 }
 
-/*
 TEST(MatrixGraphSuite, BelmanFord) {
     auto graph = testInstance();
     auto path = graph.shortestPathBF(0, 7);
@@ -247,4 +246,3 @@ TEST(MatrixGraphSuite, ShortestPathCountOff) {
         }
     }
 }
-*/

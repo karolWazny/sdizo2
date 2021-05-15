@@ -184,7 +184,103 @@ PathPointer MatrixGraph::shortestPathDijkstra(vertexId_t initialVertex, vertexId
 }
 
 PathPointer MatrixGraph::shortestPathBF(vertexId_t initialVertex, vertexId_t finalVertex) {
-    return PathPointer();
+    auto path = std::make_shared<Path>();
+    //utworzenie struktur pomocniczych
+    //kolejka
+    LinkedList<Edge> queue;
+    //tablica pomocnicza wierzchołków
+    Array<PathVertex> pathVertices(verticesAmount());
+    {
+        auto vertexIterator = vertices.iterator();
+        vertexId_t index{};
+        while(vertexIterator.hasNext()) {
+            auto vertex = vertexIterator.next();
+            pathVertices[index] = PathVertex(vertex.id);
+            index++;
+        }
+    }
+    //wrzucenie pierwszego wierzchołka
+    auto& initialVertexObject = pathVertices.find([initialVertex](PathVertex ver)->bool{
+        return initialVertex == ver.id;
+    });
+    initialVertexObject.pathLength = 0;
+    //wrzucenie do kolejki krawędzi wychodzących z pierwszego wierzchołka
+    {
+        auto& initial = vertexWithId(initialVertex);
+        for(size_t i = 0; i < edgesAmount(); i++) {
+            if(initial.incidences[i] == Incidence::OUT) {
+                auto finalIterator = vertices.iterator();
+                while(finalIterator.hasNext()) {
+                    auto& final = finalIterator.next();
+                    if(final.incidences[i] != Incidence::NONE && final.id != initial.id) {
+                        queue.pushFront(Edge(initial.id, final.id, weights[i]));
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    //przebiegi pętli, czyli relaksacje
+    for(size_t i = 0; i < verticesAmount() - 1/* kolejka jest niepusta */; i++) {
+        auto iterator = queue.iterator();
+        while(iterator.hasNext()) {
+            auto edge = iterator.next();
+            auto parentVertex = pathVertices.find([edge](PathVertex vertex)->bool{
+                return edge.initialVertex == vertex.id;
+            });
+            //tu relaksacja i-tej krawędzi z kolejki
+            auto verticesAffected = pathVertices.forEach([edge, parentVertex](PathVertex& vertex)->bool {
+                if(vertex.id != edge.finalVertex)
+                    return false;
+                if(vertex.pathLength > edge.weight + parentVertex.pathLength) {
+                    vertex.pathLength = edge.weight + parentVertex.pathLength;
+                    vertex.parent = parentVertex.id;
+                    return true;
+                }
+                return false;
+            });
+            //jeżeli dokonano relaksacji
+            if(verticesAffected) {
+                //trzeba dodać krawędzie wychodzące
+                //z końcowego wierzcholka zrelaksowanej krawedzi
+                //do kolejki
+                auto& initial = vertexWithId(edge.finalVertex);
+                for(size_t j = 0; j < edgesAmount(); j++) {
+                    if(initial.incidences[j] == Incidence::OUT) {
+                        auto toAddIterator = vertices.iterator();
+                        while(toAddIterator.hasNext()) {
+                            auto& ver = toAddIterator.next();
+                            if(ver.incidences[j] != Incidence::NONE && ver.id != initial.id) {
+                                queue.pushFront(Edge(edge.finalVertex,
+                                                     ver.id,
+                                                     weights[j]));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            iterator.remove();
+        }
+        if(i == verticesAmount() - 1) {
+            //jest ujemny cykl i trzeba z tym żyć
+        }
+    }
+    {
+        auto vertex = pathVertices.find([finalVertex](PathVertex ver)->bool{
+            return finalVertex == ver.id;
+        });
+        path->totalWeight = vertex.pathLength;
+    }
+    vertexId_t currentVertex = finalVertex;
+    while(currentVertex != INT32_MAX) {
+        path->vertices.pushFront(currentVertex);
+        auto vertex = pathVertices.find([currentVertex](PathVertex ver)->bool{
+            return currentVertex == ver.id;
+        });
+        currentVertex = vertex.parent;
+    }
+    return path;
 }
 
 GraphPointer MatrixGraph::MSTPrim() {
