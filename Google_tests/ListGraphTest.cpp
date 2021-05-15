@@ -99,7 +99,7 @@ TEST(ListGraphSuite, Kruskal){
     ASSERT_EQ(graph.edgesAmount(), 1);
     ASSERT_EQ(graph.verticesAmount(), 2);
     auto mst = graph.MSTKruskal();
-    ASSERT_EQ(mst->edgesAmount(), 1);
+    ASSERT_EQ(mst->edgesAmount(), 2);
     ASSERT_EQ(mst->verticesAmount(), 2);
 }
 
@@ -107,7 +107,7 @@ TEST(ListGraphSuite, Kruskal2){
     auto graph = ListGraph(3);
     graph.addEdgeUndirected(0, 2, 8);
     auto mst = graph.MSTKruskal();
-    ASSERT_EQ(mst->edgesAmount(), 1);
+    ASSERT_EQ(mst->edgesAmount(), 2);
     ASSERT_EQ(mst->verticesAmount(), 3);
 }
 
@@ -115,7 +115,7 @@ TEST(ListGraphSuite, KruskalFullTestCase){
     auto graph = testInstance();
 
     auto mst = graph.MSTKruskal();
-    ASSERT_EQ(mst->edgesAmount(), 7);
+    ASSERT_EQ(mst->edgesAmount(), 14);
     ASSERT_EQ(mst->verticesAmount(), 8);
 }
 

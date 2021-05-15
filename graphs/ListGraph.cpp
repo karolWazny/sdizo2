@@ -275,20 +275,17 @@ GraphPointer ListGraph::MSTKruskal() {
     Array<VertexColor> colorMappings(verticesAmount());
     FixedMinimumHeap<Edge> edges(edgesAmount());
     //przygotowanie struktur pomocniczych
-    while(iterator.hasNext()) {
-        auto& vertex = iterator.next();
-        mst->addVertex(vertex.id);
-        colorMappings[index] = VertexColor(vertex.id, vertex.id);
-        auto edgesIterator = vertex.edges.iterator();
-        //utworzenie kolejki krawędzi
+    for(size_t i = 0; i < verticesAmount(); i++) {
+        colorMappings[i] = VertexColor(i, i);
+
+        //zapełnianie kolejki krawędzi
+        auto edgesIterator = vertices[i].edges.iterator();
         while(edgesIterator.hasNext())
         {
             auto edge = edgesIterator.next();
-            edges.add(Edge(vertex.id, edge.finalVertex, edge.weight));
+            edges.add(Edge(i, edge.finalVertex, edge.weight));
         }
-        index++;
     }
-
     size_t addedEdges{};
     //dodawanie do mst kolejnych krawędzi
     while(edges.getSize() && addedEdges < verticesAmount() - 1) {
