@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <functional>
+#include "ArrayIterator.h"
 
 //szablon klasy implementującej tablicę dynamiczną
 template <typename T>
@@ -26,6 +27,8 @@ public:
     T& operator[](size_t);
     size_t forEach(std::function<bool(T&)>);
     T& find(std::function<bool(T)> condition);
+
+    ArrayIterator<T> iterator();
 private:
     std::shared_ptr<T[]> elements;
     size_t length;
@@ -208,6 +211,11 @@ T &Array<T>::find(std::function<bool(T)> condition) {
             return elements[i];
     }
     throw std::exception();
+}
+
+template<typename T>
+ArrayIterator<T> Array<T>::iterator() {
+    return ArrayIterator<T>(this);
 }
 
 #endif //SDIZO_1_ARRAY_H
