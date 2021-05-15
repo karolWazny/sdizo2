@@ -127,7 +127,6 @@ TEST(MatrixGraphSuite, Kruskal2){
     auto graph = MatrixGraph(3);
     graph.addEdgeUndirected(0, 2, 8);
     auto mst = graph.MSTKruskal();
-    std::cout << "dupa\n";
     ASSERT_EQ(mst->edgesAmount(), 1);
     ASSERT_EQ(mst->verticesAmount(), 3);
 }

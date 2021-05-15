@@ -114,13 +114,8 @@ PathPointer MatrixGraph::shortestPathDijkstra(vertexId_t initialVertex, vertexId
     //kolejka z wierzchołkami
     FixedMinimumHeap<PathVertex> pathVertices(verticesAmount());
     LinkedList<PathVertex> visitedVertices;
-    {
-        auto vertexIterator = vertices.iterator();
-        //zapełnienie kolejki
-        while (vertexIterator.hasNext()) {
-            auto vertex = vertexIterator.next();
-            pathVertices.add(PathVertex(vertex.id));
-        }
+    for(size_t i = 0; i < verticesAmount(); i++) {
+        pathVertices.add(PathVertex(i));
     }
     pathVertices.modifyIf([](PathVertex& vertex)->void {
         vertex.pathLength = 0;
@@ -133,21 +128,15 @@ PathPointer MatrixGraph::shortestPathDijkstra(vertexId_t initialVertex, vertexId
         //dodajemy węzeł do zbioru węzłów odwiedzonych
         visitedVertices.pushFront(pathVertex);
         auto vertexIterator = vertices.iterator();
-        MatrixGraphVertex currentVertex;
         //szukamy w grafie dodawanego węzła, żeby dorwać jego listę krawędzi
-        while(vertexIterator.hasNext()) {
-            currentVertex = vertexIterator.next();
-            if(currentVertex.id == pathVertex.id) {
-                break;
-            }
-        }
+        MatrixGraphVertex currentVertex = vertices[pathVertex.id];
+
+        //iteracja po krawędziach, żeby znaleźć sąsiadów aktualnego węzła
         for(size_t i = 0; i < edgesAmount(); i++) {
             if(currentVertex.incidences[i] == Incidence::OUT) {
-                auto iterator = vertices.iterator();
-                while(iterator.hasNext()) {
-                    auto& vertex = iterator.next();
-                    if(vertex.incidences[i] != Incidence::NONE && vertex.id != currentVertex.id) {
-                        Edge edge = Edge(currentVertex.id, vertex.id, weights[i]);
+                for(size_t k = 0; k < verticesAmount(); k++) {
+                    if(vertices[k].incidences[i] != Incidence::NONE && k != pathVertex.id) {
+                        Edge edge = Edge(pathVertex.id, k, weights[i]);
                         pathVertices.modifyIf([edge, pathVertex](PathVertex& vertex)->void {
                             if(vertex.pathLength > edge.weight + pathVertex.pathLength) {
                                 vertex.pathLength = edge.weight + pathVertex.pathLength;
@@ -189,30 +178,19 @@ PathPointer MatrixGraph::shortestPathBF(vertexId_t initialVertex, vertexId_t fin
     LinkedList<Edge> queue;
     //tablica pomocnicza wierzchołków
     Array<PathVertex> pathVertices(verticesAmount());
-    {
-        auto vertexIterator = vertices.iterator();
-        vertexId_t index{};
-        while(vertexIterator.hasNext()) {
-            auto vertex = vertexIterator.next();
-            pathVertices[index] = PathVertex(vertex.id);
-            index++;
-        }
+    for(size_t i = 0; i < verticesAmount(); i++) {
+        pathVertices[i] = PathVertex(i);
     }
     //wrzucenie pierwszego wierzchołka
-    auto& initialVertexObject = pathVertices.find([initialVertex](PathVertex ver)->bool{
-        return initialVertex == ver.id;
-    });
-    initialVertexObject.pathLength = 0;
+    pathVertices[initialVertex].pathLength = 0;
     //wrzucenie do kolejki krawędzi wychodzących z pierwszego wierzchołka
     {
         auto& initial = vertexWithId(initialVertex);
         for(size_t i = 0; i < edgesAmount(); i++) {
-            if(initial.incidences[i] == Incidence::OUT) {
-                auto finalIterator = vertices.iterator();
-                while(finalIterator.hasNext()) {
-                    auto& final = finalIterator.next();
-                    if(final.incidences[i] != Incidence::NONE && final.id != initial.id) {
-                        queue.pushFront(Edge(initial.id, final.id, weights[i]));
+            if(vertices[initialVertex].incidences[i] == Incidence::OUT) {
+                for(size_t k = 0; k < verticesAmount(); k++) {
+                    if(vertices[k].incidences[i] != Incidence::NONE && k != initialVertex) {
+                        queue.pushFront(Edge(initialVertex, k, weights[i]));
                         break;
                     }
                 }
@@ -220,24 +198,18 @@ PathPointer MatrixGraph::shortestPathBF(vertexId_t initialVertex, vertexId_t fin
         }
     }
     //przebiegi pętli, czyli relaksacje
-    for(size_t i = 0; i < verticesAmount() - 1/* kolejka jest niepusta */; i++) {
+    for(size_t i = 0; i < verticesAmount() - 1; i++) {
         auto iterator = queue.iterator();
         while(iterator.hasNext()) {
             auto edge = iterator.next();
-            auto parentVertex = pathVertices.find([edge](PathVertex vertex)->bool{
-                return edge.initialVertex == vertex.id;
-            });
+            auto parentVertex = pathVertices[edge.initialVertex];
             //tu relaksacja i-tej krawędzi z kolejki
-            auto verticesAffected = pathVertices.forEach([edge, parentVertex](PathVertex& vertex)->bool {
-                if(vertex.id != edge.finalVertex)
-                    return false;
-                if(vertex.pathLength > edge.weight + parentVertex.pathLength) {
-                    vertex.pathLength = edge.weight + parentVertex.pathLength;
-                    vertex.parent = parentVertex.id;
-                    return true;
-                }
-                return false;
-            });
+            bool verticesAffected{false};
+            if(pathVertices[edge.finalVertex].pathLength > edge.weight + parentVertex.pathLength) {
+                pathVertices[edge.finalVertex].pathLength = edge.weight + parentVertex.pathLength;
+                pathVertices[edge.finalVertex].parent = edge.initialVertex;
+                verticesAffected = true;
+            }
             //jeżeli dokonano relaksacji
             if(verticesAffected) {
                 //trzeba dodać krawędzie wychodzące
@@ -246,12 +218,10 @@ PathPointer MatrixGraph::shortestPathBF(vertexId_t initialVertex, vertexId_t fin
                 auto& initial = vertexWithId(edge.finalVertex);
                 for(size_t j = 0; j < edgesAmount(); j++) {
                     if(initial.incidences[j] == Incidence::OUT) {
-                        auto toAddIterator = vertices.iterator();
-                        while(toAddIterator.hasNext()) {
-                            auto& ver = toAddIterator.next();
-                            if(ver.incidences[j] != Incidence::NONE && ver.id != initial.id) {
+                        for(size_t k = 0; k < verticesAmount(); k++) {
+                            if(vertices[k].incidences[j] != Incidence::NONE && k != edge.finalVertex) {
                                 queue.pushFront(Edge(edge.finalVertex,
-                                                     ver.id,
+                                                     k,
                                                      weights[j]));
                                 break;
                             }
@@ -261,23 +231,15 @@ PathPointer MatrixGraph::shortestPathBF(vertexId_t initialVertex, vertexId_t fin
             }
             iterator.remove();
         }
-        if(i == verticesAmount() - 1) {
+        /*if(i == verticesAmount() - 1) {
             //jest ujemny cykl i trzeba z tym żyć
-        }
+        }*/
     }
-    {
-        auto vertex = pathVertices.find([finalVertex](PathVertex ver)->bool{
-            return finalVertex == ver.id;
-        });
-        path->totalWeight = vertex.pathLength;
-    }
+    path->totalWeight = pathVertices[finalVertex].pathLength;
     vertexId_t currentVertex = finalVertex;
     while(currentVertex != INT32_MAX) {
         path->vertices.pushFront(currentVertex);
-        auto vertex = pathVertices.find([currentVertex](PathVertex ver)->bool{
-            return currentVertex == ver.id;
-        });
-        currentVertex = vertex.parent;
+        currentVertex = pathVertices[currentVertex].parent;
     }
     return path;
 }
@@ -347,8 +309,6 @@ GraphPointer MatrixGraph::MSTPrim() {
 
 GraphPointer MatrixGraph::MSTKruskal() {
     auto mst = GraphPointer(static_cast<Graph*>(new MatrixGraph(verticesAmount())));
-    auto iterator = vertices.iterator();
-    size_t index = 0;
     Array<vertexId_t> colorMappings(verticesAmount());
     FixedMinimumHeap<Edge> edges(edgesAmount() * 2);
     //przygotowanie struktur pomocniczych
