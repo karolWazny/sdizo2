@@ -125,9 +125,6 @@ TEST(MatrixGraphSuite, Kruskal){
 
 TEST(MatrixGraphSuite, Kruskal2){
     auto graph = MatrixGraph(3);
-    graph.addVertex(0);
-    graph.addVertex(1);
-    graph.addVertex(2);
     graph.addEdgeUndirected(0, 2, 8);
     auto mst = graph.MSTKruskal();
     ASSERT_EQ(mst->edgesAmount(), 1);
