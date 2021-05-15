@@ -258,8 +258,7 @@ GraphPointer ListGraph::MSTPrim() {
                 if(lastAddedVertex.id == edge.finalVertex)
                 {
                     tree->addVertex(lastAddedVertex.id);
-                    tree->addEdgeDirected(edge.initialVertex, edge.finalVertex, edge.weight);
-                    tree->addEdgeDirected(edge.finalVertex, edge.initialVertex, edge.weight);
+                    tree->addEdgeUndirected(edge.initialVertex, edge.finalVertex, edge.weight);
                     break;
                 }
             }
@@ -331,8 +330,7 @@ GraphPointer ListGraph::MSTKruskal() {
                     colorMappings[i].color = finalColor;
                 }
             }
-            mst->addEdgeDirected(edge.initialVertex, edge.finalVertex, edge.weight);
-            mst->addEdgeDirected(edge.finalVertex, edge.initialVertex, edge.weight);
+            mst->addEdgeUndirected(edge.initialVertex, edge.finalVertex, edge.weight);
             addedEdges++;
         }
     }

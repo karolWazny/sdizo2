@@ -112,7 +112,75 @@ vertexId_t MatrixGraph::edgesAmount() {
 }
 
 PathPointer MatrixGraph::shortestPathDijkstra(vertexId_t initialVertex, vertexId_t finalVertex) {
-    return PathPointer();
+    //kolejka z wierzchołkami
+    FixedMinimumHeap<PathVertex> pathVertices(verticesAmount());
+    LinkedList<PathVertex> visitedVertices;
+    {
+        auto vertexIterator = vertices.iterator();
+        //zapełnienie kolejki
+        while (vertexIterator.hasNext()) {
+            auto vertex = vertexIterator.next();
+            pathVertices.add(PathVertex(vertex.id));
+        }
+    }
+    pathVertices.modifyIf([](PathVertex& vertex)->void {
+        vertex.pathLength = 0;
+    }, [initialVertex](PathVertex vertex)->bool {
+        return vertex.id == initialVertex;
+    });
+    //relaksacja kolejnych krawędzi
+    while(pathVertices.getSize()) {
+        auto pathVertex = pathVertices.extractRoot();
+        //dodajemy węzeł do zbioru węzłów odwiedzonych
+        visitedVertices.pushFront(pathVertex);
+        auto vertexIterator = vertices.iterator();
+        MatrixGraphVertex currentVertex;
+        //szukamy w grafie dodawanego węzła, żeby dorwać jego listę krawędzi
+        while(vertexIterator.hasNext()) {
+            currentVertex = vertexIterator.next();
+            if(currentVertex.id == pathVertex.id) {
+                break;
+            }
+        }
+        for(size_t i = 0; i < edgesAmount(); i++) {
+            if(currentVertex.incidences[i] == Incidence::OUT) {
+                auto iterator = vertices.iterator();
+                while(iterator.hasNext()) {
+                    auto& vertex = iterator.next();
+                    if(vertex.incidences[i] != Incidence::NONE && vertex.id != currentVertex.id) {
+                        Edge edge = Edge(currentVertex.id, vertex.id, weights[i]);
+                        pathVertices.modifyIf([edge, pathVertex](PathVertex& vertex)->void {
+                            if(vertex.pathLength > edge.weight + pathVertex.pathLength) {
+                                vertex.pathLength = edge.weight + pathVertex.pathLength;
+                                vertex.parent = pathVertex.id;
+                            }
+                        }, [edge](PathVertex vertex)->bool {
+                            return edge.finalVertex == vertex.id;
+                        });
+                    }
+                }
+            }
+        }
+    }
+    //opracowanie konkretnej ścieżki z węzła do węzła
+    //w opraciu o drzewo najkrótszych ścieżek
+    auto path = std::make_shared<Path>();
+    auto recentVertex = finalVertex;
+    while(recentVertex != INT32_MAX) {
+        path->vertices.pushFront(recentVertex);
+        auto iterator = visitedVertices.iterator();
+        while(iterator.hasNext()) {
+            auto vertex = iterator.next();
+            if(vertex.id == recentVertex) {
+                recentVertex = vertex.parent;
+                if(vertex.id == finalVertex) {
+                    path->totalWeight = vertex.pathLength;
+                }
+                break;
+            }
+        }
+    }
+    return path;
 }
 
 PathPointer MatrixGraph::shortestPathBF(vertexId_t initialVertex, vertexId_t finalVertex) {
@@ -187,7 +255,62 @@ GraphPointer MatrixGraph::MSTPrim() {
 }
 
 GraphPointer MatrixGraph::MSTKruskal() {
-    return GraphPointer();
+    auto mst = GraphPointer(static_cast<Graph*>(new MatrixGraph()));
+    auto iterator = vertices.iterator();
+    size_t index = 0;
+    Array<VertexColor> colorMappings(verticesAmount());
+    FixedMinimumHeap<Edge> edges(edgesAmount() * 2);
+    //przygotowanie struktur pomocniczych
+    while(iterator.hasNext()) {
+        auto& vertex = iterator.next();
+        mst->addVertex(vertex.id);
+        colorMappings[index] = VertexColor(vertex.id, vertex.id);
+
+        //zapełnienie kolejki krawędzi
+        for(size_t i = 0; i < edgesAmount(); i++) {
+            if(vertex.incidences[i] == Incidence::OUT) {
+                auto vertexIterator = vertices.iterator();
+                while(vertexIterator.hasNext()) {
+                    auto& otherVertex = vertexIterator.next();
+                    if(otherVertex.incidences[i] != Incidence::NONE && otherVertex.id != vertex.id) {
+                        edges.add(Edge(vertex.id, otherVertex.id, weights[i]));
+                        break;
+                    }
+                }
+            }
+        }
+        index++;
+    }
+
+    size_t addedEdges{};
+    //dodawanie do mst kolejnych krawędzi
+    while(edges.getSize() && addedEdges < verticesAmount() - 1) {
+        auto edge = edges.extractRoot();
+        vertexId_t initialColor{};
+        vertexId_t finalColor{};
+        //do tego dobrze by było użyć słownik, ale jeszcze nie ma napisanego słownika
+        for(int i = 0; i < colorMappings.getLength(); i++) {
+            if(colorMappings[i].id == edge.initialVertex)
+            {
+                initialColor = colorMappings[i].color;
+            } else if(colorMappings[i].id == edge.finalVertex) {
+                finalColor = colorMappings[i].color;
+            }
+        }
+        //jeżeli dodanie tej krawędzi nie spowoduje powstania cyklu
+        if(initialColor != finalColor) {
+            //przekolorowanie węzłów
+            for(int i = 0; i < colorMappings.getLength(); i++) {
+                if(colorMappings[i].color == initialColor) {
+                    colorMappings[i].color = finalColor;
+                }
+            }
+            mst->addEdgeUndirected(edge.initialVertex, edge.finalVertex, edge.weight);
+            addedEdges++;
+        }
+    }
+
+    return mst;
 }
 
 std::string MatrixGraph::getRepresentation() {

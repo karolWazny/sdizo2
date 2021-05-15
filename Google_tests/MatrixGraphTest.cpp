@@ -189,10 +189,9 @@ TEST(MatrixGraphSuite, Kruskal2){
     graph.addVertex(0);
     graph.addVertex(1);
     graph.addVertex(2);
-    graph.addEdgeDirected(0, 2, 8);
-    graph.addEdgeDirected(2, 0, 8);
+    graph.addEdgeUndirected(0, 2, 8);
     auto mst = graph.MSTKruskal();
-    ASSERT_EQ(mst->edgesAmount(), 2);
+    ASSERT_EQ(mst->edgesAmount(), 1);
     ASSERT_EQ(mst->verticesAmount(), 3);
 }
 
@@ -200,11 +199,11 @@ TEST(MatrixGraphSuite, KruskalFullTestCase){
     auto graph = testInstance();
 
     auto mst = graph.MSTKruskal();
-    ASSERT_EQ(mst->edgesAmount(), 14);
+    ASSERT_EQ(mst->edgesAmount(), 7);
     ASSERT_EQ(mst->verticesAmount(), 8);
 }
 
-/*TEST(MatrixGraphSuite, Dijkstra) {
+TEST(MatrixGraphSuite, Dijkstra) {
     auto graph = testInstance();
     auto path = graph.shortestPathDijkstra(0, 7);
     ASSERT_EQ(path->totalWeight, 16);
@@ -216,6 +215,7 @@ TEST(MatrixGraphSuite, Dijkstra2) {
     ASSERT_EQ(path->totalWeight, 17);
 }
 
+/*
 TEST(MatrixGraphSuite, BelmanFord) {
     auto graph = testInstance();
     auto path = graph.shortestPathBF(0, 7);
@@ -246,4 +246,5 @@ TEST(MatrixGraphSuite, ShortestPathCountOff) {
                       graph.shortestPathDijkstra(i, k)->totalWeight);
         }
     }
-}*/
+}
+*/
