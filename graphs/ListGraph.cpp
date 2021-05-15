@@ -74,34 +74,24 @@ PathPointer ListGraph::shortestPathDijkstra(vertexId_t initialVertex, vertexId_t
     //kolejka z wierzchołkami
     FixedMinimumHeap<PathVertex> pathVertices(verticesAmount());
     LinkedList<PathVertex> visitedVertices;
-    {
-        auto vertexIterator = vertices.iterator();
-        //zapełnienie kolejki
-        while (vertexIterator.hasNext()) {
-            auto vertex = vertexIterator.next();
-            pathVertices.add(PathVertex(vertex.id));
-        }
+    //zapełnienie kolejki
+    for(size_t i = 0; i < verticesAmount(); i++) {
+        pathVertices.add(i);
     }
+
     pathVertices.modifyIf([](PathVertex& vertex)->void {
         vertex.pathLength = 0;
     }, [initialVertex](PathVertex vertex)->bool {
         return vertex.id == initialVertex;
     });
+
     //relaksacja kolejnych krawędzi
     while(pathVertices.getSize()) {
         auto pathVertex = pathVertices.extractRoot();
         //dodajemy węzeł do zbioru węzłów odwiedzonych
         visitedVertices.pushFront(pathVertex);
-        auto vertexIterator = vertices.iterator();
-        ListGraphVertex currentVertex;
         //szukamy w grafie dodawanego węzła, żeby dorwać jego listę krawędzi
-        while(vertexIterator.hasNext()) {
-            currentVertex = vertexIterator.next();
-            if(currentVertex.id == pathVertex.id) {
-                break;
-            }
-        }
-        auto edgeIterator = currentVertex.edges.iterator();
+        auto edgeIterator = edgesFromVertex(pathVertex.id);
         //relaksacja krawędzi wychodzących z dodanego wierzchołka
         while(edgeIterator.hasNext()) {
             const auto& edge = edgeIterator.next();
