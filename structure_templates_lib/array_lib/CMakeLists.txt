@@ -4,7 +4,8 @@ project(array_lib)
 set(CMAKE_CXX_STANDARD 17)
 
 set(HEADER_FILES
-        Array.h)
+        Array.h
+        ArrayIterator.h)
 
 set(SOURCE_FILES
         index.cpp)
