@@ -28,10 +28,10 @@ void Main::interpretInput() {
         option = std::stoi(input);
         switch(option){
             case 1:
-                mst();
+                shortestPaths();
                 break;
             case 2:
-                shortestPaths();
+                mst();
                 break;
             case 3:
                 keepGoing = false;
@@ -40,15 +40,15 @@ void Main::interpretInput() {
                 throw 4;
         }
     } catch (...) {
-        std::wcout << L"Niewlasciwy symbol." << std::endl;
+        std::cout << "Niewlasciwy symbol." << std::endl;
         return;
     }
 }
 
 void Main::mst() {
-
+    undirected.run();
 }
 
 void Main::shortestPaths() {
-
+    directed.run();
 }

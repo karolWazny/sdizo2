@@ -4,6 +4,9 @@
 #include <string>
 #include <iostream>
 
+#include "DirectedOperations.h"
+#include "UndirectedOperations.h"
+
 using String = std::string;
 
 class Main
@@ -18,6 +21,9 @@ public:
 private:
     bool keepGoing = true;
     String input;
+
+    DirectedOperations directed;
+    UndirectedOperations undirected;
 };
 
 
