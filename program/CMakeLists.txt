@@ -8,14 +8,16 @@ set(HEADER_FILES
         Operations.h
         Randomizer.h
         DirectedOperations.h
-        UndirectedOperations.h)
+        UndirectedOperations.h
+        TextFileReader.h)
 
 set(SOURCE_FILES
         Main.cpp
         Operations.cpp
         Randomizer.cpp
         DirectedOperations.cpp
-        UndirectedOperations.cpp)
+        UndirectedOperations.cpp
+        TextFileReader.cpp)
 
 link_libraries(graphs)
 

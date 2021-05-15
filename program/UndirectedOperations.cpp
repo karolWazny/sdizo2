@@ -46,7 +46,7 @@ void UndirectedOperations::interpretInput() {
                 throw 4;
         }
     } catch (...) {
-        std::wcout << L"Niewlasciwy symbol." << std::endl;
+        std::cout << "Niewlasciwy symbol." << std::endl;
         return;
     }
 }
