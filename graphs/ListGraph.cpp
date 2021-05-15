@@ -133,15 +133,10 @@ PathPointer ListGraph::shortestPathBF(vertexId_t initialVertex, vertexId_t final
     LinkedList<Edge> queue;
     //tablica pomocnicza wierzchołków
     Array<PathVertex> pathVertices(verticesAmount());
-    {
-        auto vertexIterator = vertices.iterator();
-        vertexId_t index{};
-        while(vertexIterator.hasNext()) {
-            auto vertex = vertexIterator.next();
-            pathVertices[index] = PathVertex(vertex.id);
-            index++;
-        }
+    for(size_t i = 0; i < verticesAmount(); i++) {
+        pathVertices[i] = PathVertex(i);
     }
+
     //wrzucenie pierwszego wierzchołka
     auto& initialVertexObject = pathVertices.find([initialVertex](PathVertex ver)->bool{
         return initialVertex == ver.id;
