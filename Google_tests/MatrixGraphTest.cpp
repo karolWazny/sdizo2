@@ -114,17 +114,12 @@ TEST(MatrixGraphSuite, PrimFullTestCase){
 }
 
 TEST(MatrixGraphSuite, Kruskal){
-    auto graph = MatrixGraph(3);
-    graph.addVertex(0);
-    graph.addVertex(1);
-    graph.addVertex(2);
-    graph.addEdgeDirected(0, 2, 8);
+    auto graph = MatrixGraph(2);
+    graph.addEdgeDirected(0, 1, 8);
     ASSERT_EQ(graph.edgesAmount(), 1);
-    graph.removeVertex(2);
-    ASSERT_EQ(graph.edgesAmount(), 0);
     ASSERT_EQ(graph.verticesAmount(), 2);
     auto mst = graph.MSTKruskal();
-    ASSERT_EQ(mst->edgesAmount(), 0);
+    ASSERT_EQ(mst->edgesAmount(), 1);
     ASSERT_EQ(mst->verticesAmount(), 2);
 }
 

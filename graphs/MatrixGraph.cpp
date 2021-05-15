@@ -38,13 +38,7 @@ void MatrixGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVert
             if(i != initialVertex && i != finalVertex) {
                 vertices[i].incidences.pushBack(Incidence::NONE);
             }
-        }/*
-        while(iterator.hasNext()) {
-            auto& ver = iterator.next();
-            if(ver.id != initialVertex && ver.id != finalVertex) {
-                ver.incidences.pushBack(Incidence::NONE);
-            }
-        }*/
+        }
         initVer.incidences.pushBack(Incidence::OUT);
         finVer.incidences.pushBack(Incidence::IN);
         weights.pushBack(weight);
@@ -355,13 +349,34 @@ GraphPointer MatrixGraph::MSTKruskal() {
     auto mst = GraphPointer(static_cast<Graph*>(new MatrixGraph(verticesAmount())));
     auto iterator = vertices.iterator();
     size_t index = 0;
-    Array<VertexColor> colorMappings(verticesAmount());
+    Array<vertexId_t> colorMappings(verticesAmount());
     FixedMinimumHeap<Edge> edges(edgesAmount() * 2);
     //przygotowanie struktur pomocniczych
+    for(size_t i = 0; i < verticesAmount(); i++) {
+        colorMappings[i] = i;
+
+        for(size_t k = 0; k < edgesAmount(); k++) {
+            if(vertices[i].incidences[k] == Incidence::OUT) {
+                //auto vertexIterator = vertices.iterator();
+                for(size_t otherVertexIndex = 0; otherVertexIndex < verticesAmount(); otherVertexIndex++){
+                    if(vertices[otherVertexIndex].incidences[k] != Incidence::NONE && otherVertexIndex != i) {
+                        edges.add(Edge(i, otherVertexIndex, weights[k]));
+                        break;
+                    }
+                }/*
+                while(vertexIterator.hasNext()) {
+                    auto& otherVertex = vertexIterator.next();
+                    if(otherVertex.incidences[k] != Incidence::NONE && otherVertex.id != vertex.id) {
+                        edges.add(Edge(vertex.id, otherVertex.id, weights[k]));
+                        break;
+                    }
+                }*/
+            }
+        }
+    }
+
     while(iterator.hasNext()) {
         auto& vertex = iterator.next();
-        mst->addVertex(vertex.id);
-        colorMappings[index] = VertexColor(vertex.id, vertex.id);
 
         //zapełnienie kolejki krawędzi
         for(size_t i = 0; i < edgesAmount(); i++) {
@@ -387,19 +402,19 @@ GraphPointer MatrixGraph::MSTKruskal() {
         vertexId_t finalColor{};
         //do tego dobrze by było użyć słownik, ale jeszcze nie ma napisanego słownika
         for(int i = 0; i < colorMappings.getLength(); i++) {
-            if(colorMappings[i].id == edge.initialVertex)
+            if(i == edge.initialVertex)
             {
-                initialColor = colorMappings[i].color;
-            } else if(colorMappings[i].id == edge.finalVertex) {
-                finalColor = colorMappings[i].color;
+                initialColor = colorMappings[i];
+            } else if(i == edge.finalVertex) {
+                finalColor = colorMappings[i];
             }
         }
         //jeżeli dodanie tej krawędzi nie spowoduje powstania cyklu
         if(initialColor != finalColor) {
             //przekolorowanie węzłów
             for(int i = 0; i < colorMappings.getLength(); i++) {
-                if(colorMappings[i].color == initialColor) {
-                    colorMappings[i].color = finalColor;
+                if(colorMappings[i] == initialColor) {
+                    colorMappings[i] = finalColor;
                 }
             }
             mst->addEdgeUndirected(edge.initialVertex, edge.finalVertex, edge.weight);
