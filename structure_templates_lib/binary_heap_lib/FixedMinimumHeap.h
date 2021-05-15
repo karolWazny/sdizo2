@@ -192,9 +192,10 @@ void FixedMinimumHeap<T>::modifyIf(std::function<void(T &)> modify, std::functio
         if(condition(content[i]))
         {
             modify(content[i]);
-            updatePosition(i);
-            break;
         }
+    }
+    for(int i = 0; i < size; i++) {
+        cascadeUpFrom(i);
     }
 }
 
