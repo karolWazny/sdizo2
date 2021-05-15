@@ -7,6 +7,7 @@ struct MatrixGraphVertex;
 
 class MatrixGraph : public Graph{
 public:
+    explicit MatrixGraph(size_t size);
     void addVertex(vertexId_t vertexId) override;
     void addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
     void addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
@@ -26,7 +27,7 @@ public:
 private:
     MatrixGraphVertex& vertexWithId(vertexId_t id);
 
-    LinkedList<MatrixGraphVertex> vertices;
+    Array<MatrixGraphVertex> vertices;
     Array<int> weights;
 };
 

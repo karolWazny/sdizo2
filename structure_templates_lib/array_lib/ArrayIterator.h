@@ -30,7 +30,7 @@ void ArrayIterator<T>::remove() {
 
 template<typename T>
 bool ArrayIterator<T>::hasNext() {
-    return index <= owner->getLength();
+    return index < owner->getLength();
 }
 
 

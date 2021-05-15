@@ -1,6 +1,6 @@
 #include "MatrixGraph.h"
 
-void MatrixGraph::addVertex(vertexId_t vertexId) {
+void MatrixGraph::addVertex(vertexId_t vertexId) {/*
     //sprawdzamy, czy nie mamy już takiego wierzchołka
     auto iterator = vertices.iterator();
     while(iterator.hasNext()) {
@@ -15,7 +15,7 @@ void MatrixGraph::addVertex(vertexId_t vertexId) {
         incidence = Incidence::NONE;
         return false;
     });
-    vertices.pushBack(ver);
+    vertices.pushBack(ver);*/
 }
 
 void MatrixGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
@@ -34,12 +34,17 @@ void MatrixGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVert
         }
         //jeżeli taka krawędź jeszcze nie istnieje
         auto iterator = vertices.iterator();
+        for(size_t i = 0; i < verticesAmount(); i++) {
+            if(i != initialVertex && i != finalVertex) {
+                vertices[i].incidences.pushBack(Incidence::NONE);
+            }
+        }/*
         while(iterator.hasNext()) {
             auto& ver = iterator.next();
             if(ver.id != initialVertex && ver.id != finalVertex) {
                 ver.incidences.pushBack(Incidence::NONE);
             }
-        }
+        }*/
         initVer.incidences.pushBack(Incidence::OUT);
         finVer.incidences.pushBack(Incidence::IN);
         weights.pushBack(weight);
@@ -49,7 +54,7 @@ void MatrixGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVert
 }
 
 void MatrixGraph::removeVertex(vertexId_t vertexId) {
-    auto vertexIterator = vertices.iterator();
+    /*auto vertexIterator = vertices.iterator();
     while(vertexIterator.hasNext()) {
         auto& vertex = vertexIterator.next();
         if(vertex.id == vertexId) {
@@ -65,7 +70,7 @@ void MatrixGraph::removeVertex(vertexId_t vertexId) {
             vertexIterator.remove();
             break;
         }
-    }
+    }*/
 }
 
 void MatrixGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) {
@@ -285,54 +290,50 @@ PathPointer MatrixGraph::shortestPathBF(vertexId_t initialVertex, vertexId_t fin
 
 GraphPointer MatrixGraph::MSTPrim() {
     //zwracany podgraf
-    auto tree = GraphPointer(static_cast<Graph*>(new MatrixGraph()));
+    auto tree = GraphPointer(static_cast<Graph*>(new MatrixGraph(verticesAmount())));
+    size_t numberOfAddedVertices{};
     //drzewo zawierające identyfikatory już dodanych wierzchołków
     rbtree<vertexId_t> addedVertices;
     //kolejka krawędzi wychodzących z wierzchołków już dodanych
     FixedMinimumHeap<Edge> edgesToAdd(edgesAmount());
-    MatrixGraphVertex lastAddedVertex;
-    while(tree->verticesAmount() < this->verticesAmount()) {
+    vertexId_t lastAddedVertex{};
+    //while(tree->verticesAmount() < this->verticesAmount()) {
+    while(numberOfAddedVertices < this->verticesAmount()) {
         //wybór kolejnego wierzchołka do dodania
         if(edgesToAdd.getSize() == 0) //gdy żadne wierzchołki nie są dostępne z dotychczas dodanych
         {
-            auto iterator = vertices.iterator();
-            while(iterator.hasNext())
-            {
-                lastAddedVertex = iterator.next();
-                if(!addedVertices.contains(lastAddedVertex.id))
+            for(size_t i = 0; i < verticesAmount(); i++) {
+                if(!addedVertices.contains(i))
                 {
-                    tree->addVertex(lastAddedVertex.id);
+                    numberOfAddedVertices++;
+                    lastAddedVertex = i;
                     break;
                 }
             }
         } else { //dołożenie najlżejszej krawędzi, która nie utworzy cyklu
             auto edge = edgesToAdd.extractRoot();
-            auto iterator = vertices.iterator();
-            //znajdujemy dodawany, wierzchołek; przyda się, żeby dodać jego krawędzie wyjściowe do kolejki
-            while(iterator.hasNext())
-            {
-                lastAddedVertex = iterator.next();
-                if(lastAddedVertex.id == edge.finalVertex)
+            for(size_t i = 0; i < verticesAmount(); i++) {
+                if(i == edge.finalVertex)
                 {
-                    tree->addVertex(lastAddedVertex.id);
+                    //tree->addVertex(lastAddedVertex.id);
                     tree->addEdgeUndirected(edge.initialVertex, edge.finalVertex, edge.weight);
+                    numberOfAddedVertices++;
+                    lastAddedVertex = i;
                     break;
                 }
             }
         }
         //dodanie nowego wierzchołka do listy dodanych wierzchołków
-        addedVertices.put(lastAddedVertex.id);
+        addedVertices.put(lastAddedVertex);
 
         //dodajemy krawędzie wyjściowe z nowego wierzchołka do kolejki
         for(size_t i = 0; i < weights.getLength(); i++) {
-            if(lastAddedVertex.incidences[i] == Incidence::OUT) {
-                auto iterator = vertices.iterator();
-                while(iterator.hasNext()) {
-                    auto& ver = iterator.next();
-                    if(ver.incidences[i] != Incidence::NONE && ver.id != lastAddedVertex.id) {
+            if(vertices[lastAddedVertex].incidences[i] == Incidence::OUT) {
+                for(size_t k = 0; k < verticesAmount(); k++) {
+                    if(vertices[k].incidences[i] != Incidence::NONE && k != lastAddedVertex) {
                         Edge current{};
-                        current.initialVertex = lastAddedVertex.id;
-                        current.finalVertex = ver.id;
+                        current.initialVertex = lastAddedVertex;
+                        current.finalVertex = k;
                         current.weight = weights[i];
 
                         edgesToAdd.add(current);
@@ -351,7 +352,7 @@ GraphPointer MatrixGraph::MSTPrim() {
 }
 
 GraphPointer MatrixGraph::MSTKruskal() {
-    auto mst = GraphPointer(static_cast<Graph*>(new MatrixGraph()));
+    auto mst = GraphPointer(static_cast<Graph*>(new MatrixGraph(verticesAmount())));
     auto iterator = vertices.iterator();
     size_t index = 0;
     Array<VertexColor> colorMappings(verticesAmount());
@@ -428,11 +429,9 @@ void MatrixGraph::addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVe
             }
         }
         //jeżeli taka krawędź jeszcze nie istnieje
-        auto iterator = vertices.iterator();
-        while(iterator.hasNext()) {
-            auto& ver = iterator.next();
-            if(ver.id != initialVertex && ver.id != finalVertex) {
-                ver.incidences.pushBack(Incidence::NONE);
+        for(size_t i = 0; i < verticesAmount(); i++) {
+            if(i != initialVertex && i != finalVertex) {
+                vertices[i].incidences.pushBack(Incidence::NONE);
             }
         }
         initVer.incidences.pushBack(Incidence::OUT);
@@ -472,12 +471,18 @@ void MatrixGraph::removeEdgeUndirected(vertexId_t initialVertex, vertexId_t fina
 }
 
 MatrixGraphVertex &MatrixGraph::vertexWithId(vertexId_t id) {
-    auto iterator = vertices.iterator();
+    /*auto iterator = vertices.iterator();
     while(iterator.hasNext()) {
         auto& ver = iterator.next();
         if(ver.id == id) {
             return ver;
         }
     }
-    throw std::exception();
+    throw std::exception();*/
+    return vertices[id];
+}
+
+MatrixGraph::MatrixGraph(size_t size) {
+    vertices = Array<MatrixGraphVertex>(size);
+    weights = Array<int>();
 }
