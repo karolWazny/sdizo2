@@ -363,37 +363,10 @@ GraphPointer MatrixGraph::MSTKruskal() {
                         edges.add(Edge(i, otherVertexIndex, weights[k]));
                         break;
                     }
-                }/*
-                while(vertexIterator.hasNext()) {
-                    auto& otherVertex = vertexIterator.next();
-                    if(otherVertex.incidences[k] != Incidence::NONE && otherVertex.id != vertex.id) {
-                        edges.add(Edge(vertex.id, otherVertex.id, weights[k]));
-                        break;
-                    }
-                }*/
-            }
-        }
-    }
-
-    while(iterator.hasNext()) {
-        auto& vertex = iterator.next();
-
-        //zapełnienie kolejki krawędzi
-        for(size_t i = 0; i < edgesAmount(); i++) {
-            if(vertex.incidences[i] == Incidence::OUT) {
-                auto vertexIterator = vertices.iterator();
-                while(vertexIterator.hasNext()) {
-                    auto& otherVertex = vertexIterator.next();
-                    if(otherVertex.incidences[i] != Incidence::NONE && otherVertex.id != vertex.id) {
-                        edges.add(Edge(vertex.id, otherVertex.id, weights[i]));
-                        break;
-                    }
                 }
             }
         }
-        index++;
     }
-
     size_t addedEdges{};
     //dodawanie do mst kolejnych krawędzi
     while(edges.getSize() && addedEdges < verticesAmount() - 1) {
