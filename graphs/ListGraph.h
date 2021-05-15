@@ -9,6 +9,8 @@ struct ListGraphVertex;
 
 class ListGraph : Graph {
 public:
+    explicit ListGraph(size_t vertices);
+
     void addVertex(vertexId_t vertexId) override;
     void addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
     void addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
@@ -26,8 +28,7 @@ public:
 private:
     ListIterator<ListGraphEdge> edgesFromVertex(vertexId_t vertexId);
 
-    LinkedList<ListGraphVertex> vertices;
-    long totalWeight;
+    Array<ListGraphVertex> vertices;
 };
 
 class ListGraphEdge {
@@ -36,6 +37,7 @@ public:
     int weight{};
 
     explicit ListGraphEdge(vertexId_t vertex) : finalVertex{vertex} {};
+    ListGraphEdge(vertexId_t vertex, int w) : finalVertex{vertex}, weight{w} {};
     ListGraphEdge() : finalVertex{0} {};
 };
 
