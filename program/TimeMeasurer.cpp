@@ -86,7 +86,7 @@ TimeMeasurer::singleMeasurement(int densityOption,
                                                                  densities[densityOption]);
                 break;
             case 1:
-                graph = GraphGenerator().generateGraphUndirected(factory,
+                graph = GraphGenerator().generateGraphDirected(factory,
                                                                  sizes[sizeOption],
                                                                  densities[densityOption]);
                 break;
