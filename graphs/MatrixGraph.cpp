@@ -100,7 +100,7 @@ PathPointer MatrixGraph::shortestPathDijkstra(vertexId_t initialVertex, vertexId
                     if(vertices[k].incidences[i] != Incidence::NONE && k != pathVertex.id) {
                         Edge edge = Edge(pathVertex.id, k, weights[i]);
                         pathVertices.modifyIf([edge, pathVertex](PathVertex& vertex)->void {
-                            if(vertex.pathLength > edge.weight + pathVertex.pathLength) {
+                            if(vertex.pathLength > edge.weight + pathVertex.pathLength&& pathVertex.pathLength != INT64_MAX) {
                                 vertex.pathLength = edge.weight + pathVertex.pathLength;
                                 vertex.parent = pathVertex.id;
                             }

@@ -76,7 +76,7 @@ PathPointer ListGraph::shortestPathDijkstra(vertexId_t initialVertex, vertexId_t
         while(edgeIterator.hasNext()) {
             const auto& edge = edgeIterator.next();
             pathVertices.modifyIf([edge, pathVertex](PathVertex& vertex)->void {
-                if(vertex.pathLength > edge.weight + pathVertex.pathLength) {
+                if(vertex.pathLength > edge.weight + pathVertex.pathLength && pathVertex.pathLength != INT64_MAX) {
                     vertex.pathLength = edge.weight + pathVertex.pathLength;
                     vertex.parent = pathVertex.id;
                 }

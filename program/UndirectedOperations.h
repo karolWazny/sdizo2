@@ -19,8 +19,8 @@ private:
     void primAlgorithm();
     void kruskalAlgorithm();
 
-    GraphPointer listGraph;
-    GraphPointer matrixGraph;
+    GraphPointer listGraph = GraphPointer(new ListGraph(0));
+    GraphPointer matrixGraph = GraphPointer(new MatrixGraph(0));
 };
 
 
