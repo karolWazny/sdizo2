@@ -26,6 +26,7 @@ void UndirectedOperations::interpretInput() {
         option = std::stoi(input);
         switch(option){
             case 1:
+                fromFile();
                 break;
             case 2:
                 break;
@@ -48,5 +49,23 @@ void UndirectedOperations::interpretInput() {
     } catch (...) {
         std::cout << "Niewlasciwy symbol." << std::endl;
         return;
+    }
+}
+
+void UndirectedOperations::fromFile() {
+    std::string text = "Wprowadz nazwe, sciezke wzgledem aktualnego folderu,\n"
+                       "lub pelna sciezke do pliku:\n";
+    std::cout << text;
+    std::string filename;
+    std::getline(std::cin, filename);
+    try {
+        TextFileReader reader;
+        auto content = reader.fromFile(filename);
+        auto generator = GraphGenerator();
+        matrixGraph = generator.buildGraphUndirected(FactoryPointer(new MatrixGraphFactory), content);
+        listGraph = generator.buildGraphUndirected(FactoryPointer(new ListGraphFactory), content);
+    } catch(...) {
+        std::cout << "Wystapil problem.\n"
+                     "Operacje anulowano.\n";
     }
 }

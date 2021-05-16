@@ -35,7 +35,7 @@ GraphGenerator::generateGraphUndirected(FactoryPointer factory, size_t vertices,
     return graph;
 }
 
-GraphPointer GraphGenerator::buildGraphDirected(FactoryPointer factory, std::unique_ptr<int32_t[]> elements) {
+GraphPointer GraphGenerator::buildGraphDirected(FactoryPointer factory, const std::shared_ptr<int32_t[]>& elements) {
     auto graph = factory->build(elements[1]);
     for(int i = 2; i < 2 + elements[0] * 3; i += 3) {
         graph->addEdgeDirected(elements[i], elements[i + 1], elements[i + 2]);
@@ -43,7 +43,7 @@ GraphPointer GraphGenerator::buildGraphDirected(FactoryPointer factory, std::uni
     return graph;
 }
 
-GraphPointer GraphGenerator::buildGraphUndirected(FactoryPointer factory, std::unique_ptr<int32_t[]> elements) {
+GraphPointer GraphGenerator::buildGraphUndirected(FactoryPointer factory, const std::shared_ptr<int32_t[]>& elements) {
     auto graph = factory->build(elements[1]);
     for(int i = 2; i < 2 + elements[0] * 3; i += 3) {
         graph->addEdgeUndirected(elements[i], elements[i + 1], elements[i + 2]);

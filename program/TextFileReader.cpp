@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-std::unique_ptr<int32_t[]> TextFileReader::fromFile(std::string filename) {
+std::shared_ptr<int32_t[]> TextFileReader::fromFile(std::string filename) {
     read(filename);
-    auto output = std::move(fileContent);
+    auto output = fileContent;
     return output;
 }
 
@@ -12,13 +12,15 @@ void TextFileReader::read(std::string filename) {
     std::ifstream stream;
     stream.open(filename);
     std::string buffer;
-    int dataSize;
+    int edgesAmount;
+    stream >> edgesAmount;
+    int dataSize = 2 + edgesAmount * 3;
     stream >> dataSize;
-    auto fileContent = std::make_unique<int32_t[]>(dataSize + 1);
-    fileContent[0] = dataSize;
-    for(int i = 1; i <= dataSize; i++)
+    auto fileContent = std::shared_ptr<int32_t[]>(new int32_t[dataSize]);
+    fileContent[0] = edgesAmount;
+    for(int i = 1; i < dataSize; i++)
     {
         stream >> fileContent[i];
     }
-    this->fileContent = std::move(fileContent);
+    this->fileContent = fileContent;
 }

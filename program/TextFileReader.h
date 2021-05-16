@@ -7,12 +7,12 @@
 
 class TextFileReader {
 public:
-    std::unique_ptr<int32_t[]> fromFile(std::string filename);
+    std::shared_ptr<int32_t[]> fromFile(std::string filename);
 
 private:
     void read(std::string);
 
-    std::unique_ptr<int32_t[]> fileContent;
+    std::shared_ptr<int32_t[]> fileContent;
 };
 
 #endif //SDIZO2_TEXTFILEREADER_H

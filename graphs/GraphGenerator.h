@@ -9,8 +9,8 @@ class GraphGenerator {
 public:
     GraphPointer generateGraphDirected(FactoryPointer factory, size_t vertices, unsigned char fulfilment);
     GraphPointer generateGraphUndirected(FactoryPointer factory, size_t vertices, unsigned char fulfilment);
-    GraphPointer buildGraphDirected(FactoryPointer factory, std::unique_ptr<int32_t[]>);
-    GraphPointer buildGraphUndirected(FactoryPointer factory, std::unique_ptr<int32_t[]>);
+    GraphPointer buildGraphDirected(FactoryPointer factory, const std::shared_ptr<int32_t[]>&);
+    GraphPointer buildGraphUndirected(FactoryPointer factory, const std::shared_ptr<int32_t[]>&);
 private:
     static unsigned long fullGraphEdgesUndirected(size_t vertices);
     static unsigned long fullGraphEdgesDirected(size_t vertices);

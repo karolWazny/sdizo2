@@ -3,6 +3,9 @@
 
 #include "Operations.h"
 #include <iostream>
+#include "../graphs/GraphGenerator.h"
+#include "../graphs/MatrixGraphFactory.h"
+#include "../graphs/ListGraphFactory.h"
 
 class UndirectedOperations : public Operations {
 public:
@@ -11,6 +14,10 @@ public:
 private:
     void menu();
     void interpretInput();
+    void fromFile();
+
+    GraphPointer listGraph;
+    GraphPointer matrixGraph;
 };
 
 

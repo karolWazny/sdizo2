@@ -4,6 +4,7 @@
 
 #include <string>
 #include "Randomizer.h"
+#include "TextFileReader.h"
 
 class Operations {
 public:
