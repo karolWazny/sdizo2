@@ -3,7 +3,7 @@
 DirectedOperations::DirectedOperations() {
     header = "GRAFY SKIEROWANE";
     firstAlgorithm = "Algorytm Dijkstry";
-    secondAlgorithm = "Algorytm Belmana-Forda";
+    secondAlgorithm = "Algorytm Bellmana-Forda";
 }
 
 void DirectedOperations::run() {
@@ -29,6 +29,7 @@ void DirectedOperations::interpretInput() {
                 fromFile();
                 break;
             case 2:
+                generate();
                 break;
             case 3:
                 displayList();
@@ -42,8 +43,6 @@ void DirectedOperations::interpretInput() {
                 bellmanFord();
                 break;
             case 7:
-                break;
-            case 8:
                 active = false;
                 break;
             default:
@@ -139,4 +138,24 @@ void DirectedOperations::bellmanFord() {
         std::cout << "Nie ma sciezki z podanego wierzcholka\n"
                      "poczatkowego do koncowego.\n";
     }
+}
+
+void DirectedOperations::generate() {
+    std::cout << "Podaj liczbe wierzcholkow:\n";
+    int size = readInt();
+    if(size < 1) {
+        throw std::exception();
+    }
+    std::cout << "Podaj gestosc grafu w procentach:\n";
+    int fulfilment = readInt();
+    if(fulfilment < 1 || fulfilment > 100) {
+        throw std::exception();
+    }
+    GraphGenerator generator;
+    Array<FactoryPointer> factories(2);
+    factories[0] = FactoryPointer(new ListGraphFactory());
+    factories[1] = FactoryPointer(new MatrixGraphFactory());
+    auto graphs = generator.generateDirectedTwin(factories, size, fulfilment);
+    listGraph = graphs[0];
+    matrixGraph = graphs[1];
 }

@@ -14,7 +14,7 @@ GraphPointer GraphGenerator::generateGraphDirected(const FactoryPointer factory,
             for(size_t k = 0; k < vertices; k++) {
                 if(i != k) {
                     if(randomizer.getBool(edgesInGraph, edgesFull)) {
-                        graph->addEdgeDirected(i, k, randomizer.getInt(50));
+                        graph->addEdgeDirected(i, k, randomizer.getInt(49) + 1);
                         referenceGraph.addEdgeDirected(i, k, 1);
                         edgesInGraph--;
                     }
@@ -39,8 +39,8 @@ GraphPointer GraphGenerator::generateGraphUndirected(FactoryPointer factory,
         for(size_t i = 0; i < vertices; i++) {
             for(size_t k = i + 1; k < vertices; k++) {
                 if(randomizer.getBool(edgesInGraph, edgesFull)) {
-                    graph->addEdgeUndirected(i, k, randomizer.getInt(50));
-                    referenceGraph.addEdgeUndirected(i, k, randomizer.getInt(50));
+                    graph->addEdgeUndirected(i, k, randomizer.getInt(49) + 1);
+                    referenceGraph.addEdgeUndirected(i, k, randomizer.getInt(49) + 1);
                     edgesInGraph--;
                 }
                 edgesFull--;
@@ -107,7 +107,7 @@ GraphGenerator::generateDirectedTwin(Array<FactoryPointer> factories, size_t ver
             for(size_t k = 0; k < vertices; k++) {
                 if(i != k) {
                     if(randomizer.getBool(edgesInGraph, edgesFull)) {
-                        auto weight = randomizer.getInt(50);
+                        auto weight = randomizer.getInt(49) + 1;
                         referenceGraph.addEdgeDirected(i, k, weight);
                         for(int j = 0; j < graphs.getLength(); j++) {
                             graphs[j]->addEdgeDirected(i, k, weight);
@@ -135,7 +135,7 @@ GraphGenerator::generateUndirectedTwin(Array<FactoryPointer> factories, size_t v
         for(size_t i = 0; i < vertices; i++) {
             for(size_t k = i + 1; k < vertices; k++) {
                 if(randomizer.getBool(edgesInGraph, edgesFull)) {
-                    auto weight = randomizer.getInt(50);
+                    auto weight = randomizer.getInt(49) + 1;
                     referenceGraph.addEdgeUndirected(i, k, weight);
                     for(int j = 0; j < graphs.getLength(); j++) {
                         graphs[j]->addEdgeUndirected(i, k, weight);

@@ -12,8 +12,7 @@ void Operations::displayMenu() {
     menuText += firstAlgorithm;
     menuText += "\n6. ";
     menuText += secondAlgorithm;
-    menuText += "\n7. Pomiar czasu\n"
-                "8. Wroc do menu glownego\n\n";
+    menuText += "\n7. Wroc do menu glownego\n\n";
     std::cout << menuText;
 }
 
