@@ -17,8 +17,9 @@ void Main::displayGreeting() {
 
 void Main::displayMenu() {
     String menuText = "1. Szukanie najkrotszych sciezek (grafy skierowane).\n";
-    menuText += "2. Wyznaczanie MST (grafy nieskierowane).\n";
-    menuText += "3. Zakoncz program.\n";
+    menuText += "2. Wyznaczanie MST (grafy nieskierowane).\n"
+                "3. Automatyczne pomiary\n";
+    menuText += "4. Zakoncz program.\n";
     std::cout << menuText;
 }
 
@@ -34,6 +35,9 @@ void Main::interpretInput() {
                 mst();
                 break;
             case 3:
+                measurements();
+                break;
+            case 4:
                 keepGoing = false;
                 break;
             default:
@@ -51,4 +55,8 @@ void Main::mst() {
 
 void Main::shortestPaths() {
     directed.run();
+}
+
+void Main::measurements() {
+    timeMeasurer.runMeasurement();
 }

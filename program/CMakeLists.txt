@@ -10,7 +10,8 @@ set(HEADER_FILES
         DirectedOperations.h
         UndirectedOperations.h
         TextFileReader.h
-        StopWatch.h)
+        StopWatch.h
+        TimeMeasurer.h)
 
 set(SOURCE_FILES
         Main.cpp
@@ -19,8 +20,13 @@ set(SOURCE_FILES
         DirectedOperations.cpp
         UndirectedOperations.cpp
         TextFileReader.cpp
-        StopWatch.cpp)
+        StopWatch.cpp
+        TimeMeasurer.cpp)
 
 link_libraries(graphs)
 
 add_library(program ${SOURCE_FILES} ${HEADER_FILES})
+
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    add_definitions(-DDEBUG=1)
+endif()

@@ -11,3 +11,7 @@ add_subdirectory(structure_templates_lib)
 add_subdirectory(program)
 
 target_link_libraries(sdizo2 graphs structure_templates_lib program)
+
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    add_definitions(-DDEBUG=1)
+endif()

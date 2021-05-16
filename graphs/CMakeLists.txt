@@ -26,3 +26,7 @@ link_libraries(structure_templates_lib)
 
 add_library(graphs ${SOURCE_FILES} ${HEADER_FILES})
 
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    add_definitions(-DDEBUG=1)
+endif()
+

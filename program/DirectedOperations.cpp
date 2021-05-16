@@ -97,10 +97,16 @@ void DirectedOperations::dijkstra() {
         default:
             throw 4;
     }
-    std::cout << "Wierzcholki na sciezce:\n";
-    std::cout << path->vertices.toString() << std::endl;
-    std::cout << "Calkowity koszt sciezki: " << std::to_string(path->totalWeight);
-    std::cout << std::endl;
+    if(path->totalWeight != INT64_MAX) {
+        std::cout << "Wierzcholki na sciezce:\n";
+        std::cout << path->vertices.toString() << std::endl;
+        std::cout << "Calkowity koszt sciezki: " << std::to_string(path->totalWeight);
+        std::cout << std::endl;
+        return;
+    } else {
+        std::cout << "Nie ma sciezki z podanego wierzcholka\n"
+                     "poczatkowego do koncowego.\n";
+    }
 }
 
 void DirectedOperations::bellmanFord() {
@@ -123,8 +129,14 @@ void DirectedOperations::bellmanFord() {
         default:
             throw 4;
     }
-    std::cout << "Wierzcholki na sciezce:\n";
-    std::cout << path->vertices.toString() << std::endl;
-    std::cout << "Calkowity koszt sciezki: " << std::to_string(path->totalWeight);
-    std::cout << std::endl;
+    if(path->totalWeight != INT64_MAX) {
+        std::cout << "Wierzcholki na sciezce:\n";
+        std::cout << path->vertices.toString() << std::endl;
+        std::cout << "Calkowity koszt sciezki: " << std::to_string(path->totalWeight);
+        std::cout << std::endl;
+        return;
+    } else {
+        std::cout << "Nie ma sciezki z podanego wierzcholka\n"
+                     "poczatkowego do koncowego.\n";
+    }
 }
