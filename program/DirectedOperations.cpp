@@ -31,12 +31,15 @@ void DirectedOperations::interpretInput() {
             case 2:
                 break;
             case 3:
+                displayList();
                 break;
             case 4:
                 break;
             case 5:
+                dijkstra();
                 break;
             case 6:
+                bellmanFord();
                 break;
             case 7:
                 break;
@@ -68,4 +71,60 @@ void DirectedOperations::fromFile() {
         std::cout << "Wystapil problem.\n"
                      "Operacje anulowano.\n";
     }
+}
+
+void DirectedOperations::displayList() {
+    std::cout << listGraph->getRepresentation() << std::endl;
+}
+
+void DirectedOperations::dijkstra() {
+    std::cout << "Podaj poczatkowy wierzcholek:\n";
+    int initial = readInt();
+    std::cout << "Podaj koncowy wierzcholek:\n";
+    int final = readInt();
+    std::cout << "Jaka reprezentacje chcesz testowac?\n"
+                 "1. Listowa.\n"
+                 "2. Macierzowa.\n";
+    int option = readInt();
+    PathPointer path;
+    switch(option) {
+        case 1:
+            path = listGraph->shortestPathDijkstra(initial, final);
+            break;
+        case 2:
+            path = matrixGraph->shortestPathDijkstra(initial, final);
+            break;
+        default:
+            throw 4;
+    }
+    std::cout << "Wierzcholki na sciezce:\n";
+    std::cout << path->vertices.toString() << std::endl;
+    std::cout << "Calkowity koszt sciezki: " << std::to_string(path->totalWeight);
+    std::cout << std::endl;
+}
+
+void DirectedOperations::bellmanFord() {
+    std::cout << "Podaj poczatkowy wierzcholek:\n";
+    int initial = readInt();
+    std::cout << "Podaj koncowy wierzcholek:\n";
+    int final = readInt();
+    std::cout << "Jaka reprezentacje chcesz testowac?\n"
+                 "1. Listowa.\n"
+                 "2. Macierzowa.\n";
+    int option = readInt();
+    PathPointer path;
+    switch(option) {
+        case 1:
+            path = listGraph->shortestPathBF(initial, final);
+            break;
+        case 2:
+            path = matrixGraph->shortestPathBF(initial, final);
+            break;
+        default:
+            throw 4;
+    }
+    std::cout << "Wierzcholki na sciezce:\n";
+    std::cout << path->vertices.toString() << std::endl;
+    std::cout << "Calkowity koszt sciezki: " << std::to_string(path->totalWeight);
+    std::cout << std::endl;
 }

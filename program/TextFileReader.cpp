@@ -15,7 +15,6 @@ void TextFileReader::read(std::string filename) {
     int edgesAmount;
     stream >> edgesAmount;
     int dataSize = 2 + edgesAmount * 3;
-    stream >> dataSize;
     auto fileContent = std::shared_ptr<int32_t[]>(new int32_t[dataSize]);
     fileContent[0] = edgesAmount;
     for(int i = 1; i < dataSize; i++)

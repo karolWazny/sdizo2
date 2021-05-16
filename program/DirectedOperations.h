@@ -15,6 +15,9 @@ private:
     void menu();
     void interpretInput();
     void fromFile();
+    void displayList();
+    void dijkstra();
+    void bellmanFord();
 
     GraphPointer listGraph;
     GraphPointer matrixGraph;

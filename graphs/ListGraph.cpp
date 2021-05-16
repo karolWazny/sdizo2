@@ -311,6 +311,9 @@ void ListGraph::removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalV
 
 ListGraph::ListGraph(size_t verticesAmount) {
     vertices = Array<ListGraphVertex>(verticesAmount);
+    for(size_t i = 0; i < verticesAmount; i++) {
+        vertices[i].id = i;
+    }
 }
 
 std::string ListGraphVertex::toString() {

@@ -31,12 +31,15 @@ void UndirectedOperations::interpretInput() {
             case 2:
                 break;
             case 3:
+                displayList();
                 break;
             case 4:
                 break;
             case 5:
+                primAlgorithm();
                 break;
             case 6:
+                kruskalAlgorithm();
                 break;
             case 7:
                 break;
@@ -68,4 +71,24 @@ void UndirectedOperations::fromFile() {
         std::cout << "Wystapil problem.\n"
                      "Operacje anulowano.\n";
     }
+}
+
+void UndirectedOperations::displayList() {
+    std::cout << listGraph->getRepresentation() << std::endl;
+}
+
+void UndirectedOperations::primAlgorithm() {
+    std::cout << "MST wyznaczone przy uzyciu algorytmu Prima:\n"
+                 "Reprezentacja listowa:\n";
+    std::cout << listGraph->MSTPrim()->getRepresentation() << std::endl;
+    std::cout << "oraz z zastosowaniem macierzy incydencji:\n";
+    std::cout << matrixGraph->MSTPrim()->getRepresentation() << std::endl;
+}
+
+void UndirectedOperations::kruskalAlgorithm() {
+    std::cout << "MST wyznaczone przy uzyciu algorytmu Kruskala:\n"
+                 "Reprezentacja listowa:\n";
+    std::cout << listGraph->MSTKruskal()->getRepresentation() << std::endl;
+    std::cout << "oraz z zastosowaniem macierzy incydencji:\n";
+    std::cout << matrixGraph->MSTKruskal()->getRepresentation() << std::endl;
 }

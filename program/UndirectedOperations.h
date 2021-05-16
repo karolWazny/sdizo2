@@ -15,6 +15,9 @@ private:
     void menu();
     void interpretInput();
     void fromFile();
+    void displayList();
+    void primAlgorithm();
+    void kruskalAlgorithm();
 
     GraphPointer listGraph;
     GraphPointer matrixGraph;
