@@ -1,6 +1,7 @@
 #ifndef SDIZO2_MATRIXGRAPH_H
 #define SDIZO2_MATRIXGRAPH_H
 
+#include <sstream>
 #include "Graph.h"
 
 struct MatrixGraphVertex;

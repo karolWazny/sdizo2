@@ -19,6 +19,7 @@ private:
     void dijkstra();
     void bellmanFord();
     void generate();
+    void displayMatrix();
 
     GraphPointer listGraph = GraphPointer(new ListGraph(0));
     GraphPointer matrixGraph = GraphPointer(new MatrixGraph(0));

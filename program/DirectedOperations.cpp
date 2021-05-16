@@ -35,6 +35,7 @@ void DirectedOperations::interpretInput() {
                 displayList();
                 break;
             case 4:
+                displayMatrix();
                 break;
             case 5:
                 dijkstra();
@@ -158,4 +159,8 @@ void DirectedOperations::generate() {
     auto graphs = generator.generateDirectedTwin(factories, size, fulfilment);
     listGraph = graphs[0];
     matrixGraph = graphs[1];
+}
+
+void DirectedOperations::displayMatrix() {
+    std::cout << matrixGraph->getRepresentation() << std::endl;
 }

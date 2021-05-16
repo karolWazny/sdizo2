@@ -35,6 +35,7 @@ void UndirectedOperations::interpretInput() {
                 displayList();
                 break;
             case 4:
+                displayMatrix();
                 break;
             case 5:
                 primAlgorithm();
@@ -110,4 +111,8 @@ void UndirectedOperations::generate() {
     auto graphs = generator.generateUndirectedTwin(factories, size, fulfilment);
     listGraph = graphs[0];
     matrixGraph = graphs[1];
+}
+
+void UndirectedOperations::displayMatrix() {
+    std::cout << matrixGraph->getRepresentation() << std::endl;
 }

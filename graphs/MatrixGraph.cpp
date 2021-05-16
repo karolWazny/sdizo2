@@ -1,4 +1,5 @@
 #include "MatrixGraph.h"
+#include <iomanip>
 
 void MatrixGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
     try {
@@ -89,7 +90,6 @@ PathPointer MatrixGraph::shortestPathDijkstra(vertexId_t initialVertex, vertexId
         auto pathVertex = pathVertices.extractRoot();
         //dodajemy węzeł do zbioru węzłów odwiedzonych
         visitedVertices.pushFront(pathVertex);
-        auto vertexIterator = vertices.iterator();
         //szukamy w grafie dodawanego węzła, żeby dorwać jego listę krawędzi
         MatrixGraphVertex currentVertex = vertices[pathVertex.id];
 
@@ -215,7 +215,6 @@ GraphPointer MatrixGraph::MSTPrim() {
     //kolejka krawędzi wychodzących z wierzchołków już dodanych
     FixedMinimumHeap<Edge> edgesToAdd(edgesAmount());
     vertexId_t lastAddedVertex{};
-    //while(tree->verticesAmount() < this->verticesAmount()) {
     while(numberOfAddedVertices < this->verticesAmount()) {
         //wybór kolejnego wierzchołka do dodania
         if(edgesToAdd.getSize() == 0) //gdy żadne wierzchołki nie są dostępne z dotychczas dodanych
@@ -279,7 +278,6 @@ GraphPointer MatrixGraph::MSTKruskal() {
 
         for(size_t k = 0; k < edgesAmount(); k++) {
             if(vertices[i].incidences[k] == Incidence::OUT) {
-                //auto vertexIterator = vertices.iterator();
                 for(size_t otherVertexIndex = 0; otherVertexIndex < verticesAmount(); otherVertexIndex++){
                     if(vertices[otherVertexIndex].incidences[k] != Incidence::NONE && otherVertexIndex != i) {
                         edges.add(Edge(i, otherVertexIndex, weights[k]));
@@ -321,7 +319,25 @@ GraphPointer MatrixGraph::MSTKruskal() {
 }
 
 std::string MatrixGraph::getRepresentation() {
-    return std::string();
+    std::ostringstream stream;
+
+    stream << "[";
+
+    for(size_t i = 0; i < verticesAmount(); i++) {
+        stream << "\n" << i << ":";
+        for(size_t k = 0; k < edgesAmount(); k++) {
+            auto toBeWritten = 0;
+            if(vertices[i].incidences[k] == Incidence::OUT)
+                toBeWritten = weights[k];
+            else if(vertices[i].incidences[k] == Incidence::IN)
+                toBeWritten = -weights[k];
+            stream << std::setw(4) /*<< std::internal*/ << toBeWritten;
+        }
+    }
+    if(verticesAmount())
+        stream << "\n";
+    stream << "]";
+    return stream.str();
 }
 
 void MatrixGraph::addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
@@ -381,14 +397,6 @@ void MatrixGraph::removeEdgeUndirected(vertexId_t initialVertex, vertexId_t fina
 }
 
 MatrixGraphVertex &MatrixGraph::vertexWithId(vertexId_t id) {
-    /*auto iterator = vertices.iterator();
-    while(iterator.hasNext()) {
-        auto& ver = iterator.next();
-        if(ver.id == id) {
-            return ver;
-        }
-    }
-    throw std::exception();*/
     return vertices[id];
 }
 
