@@ -7,7 +7,7 @@
 struct ListGraphEdge;
 struct ListGraphVertex;
 
-class ListGraph : Graph {
+class ListGraph : public Graph {
 public:
     explicit ListGraph(size_t vertices);
 

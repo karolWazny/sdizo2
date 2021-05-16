@@ -7,13 +7,20 @@ set(HEADER_FILES
         Graph.h
         Path.h
         ListGraph.h
-        MatrixGraph.h)
+        MatrixGraph.h
+        GraphGenerator.h
+        GraphFactory.h
+        ListGraphFactory.h
+        MatrixGraphFactory.h)
 
 set(SOURCE_FILES
         Path.cpp
         ListGraph.cpp
         MatrixGraph.cpp
-        Graph.cpp)
+        Graph.cpp
+        GraphGenerator.cpp
+        ListGraphFactory.cpp
+        MatrixGraphFactory.cpp)
 
 link_libraries(structure_templates_lib)
 
