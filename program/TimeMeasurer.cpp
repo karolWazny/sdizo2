@@ -1,10 +1,24 @@
 #include "TimeMeasurer.h"
+#include <iomanip>
 
 std::string TimeMeasurer::representations[2] = {"list", "matrix"};
 std::string TimeMeasurer::problems[2] = {"mst", "paths"};
 std::string TimeMeasurer::algorithms[2][2] = {{"prim", "kruskal"}, {"dijkstra", "b-ford"}};
 std::string TimeMeasurer::columnHeaders = "TIME\tDENSITY\tSIZE\tREPRES\tPROBLEM\tALGORITHM";
 unsigned long long(*(TimeMeasurer::measuringMethods[2][2]))(GraphPointer) = {{prim, kruskal}, {dijkstra, bFord}};
+
+void gotoxy(short x, short y)
+{
+    COORD coord;
+    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(handle, coord);
+}
+
+void clear() {
+    system("cls");
+}
 
 std::ostream& operator<<(std::ostream& ostream, const SingleMeasurement meas) {
     ostream << std::to_string(meas.time) << "\t"
@@ -17,6 +31,7 @@ std::ostream& operator<<(std::ostream& ostream, const SingleMeasurement meas) {
 }
 
 void TimeMeasurer::runMeasurement() {
+
     auto startTime = std::time(0);
     LinkedList<SingleMeasurement> measurements;
 #if DEBUG
@@ -25,16 +40,22 @@ void TimeMeasurer::runMeasurement() {
         for(int si = 0; si < 2; si++) {
 #else
     for(int dens = 0; dens < 4; dens++) {
-        std::cout << "@";
+        clear();
+        gotoxy(0,0);
+        std::cout << "Density: " << std::to_string(densities[dens]) << "% (option "<< dens + 1 << " out of 4)"  << "        ";
         for(int si = 0; si < 5; si++) {
 #endif
-            std::cout << "|";
+            gotoxy(0,1);
+            std::cout << "Size: " << std::setw(6) << std::left << sizes[si] << " (option "<< si + 1 << " out of 5)"  << "        ";
             for(int repr = 0; repr < 2; repr++) {
-                std::cout << "*";
+                gotoxy(0,2);
+                std::cout << "Representation: "<< std::setw(10) << std::left << representations[repr] << " (option "<< repr + 1 << " out of 2)"  << "        ";
                 for(int prob = 0; prob < 2; prob++) {
-                    std::cout << ";";
+                    gotoxy(0,3);
+                    std::cout << "Problem: " << std::setw(10) << std::left << problems[prob] << " (option "<< prob + 1 << " out of 2)"  << "        ";
                     for(int algo = 0; algo < 2; algo++) {
-                        std::cout << ".";
+                        gotoxy(0,4);
+                        std::cout << "Algorithm: " << std::setw(10) << std::left << algorithms[prob][algo] << " (option "<< algo + 1 << " out of 2)"  << "        ";
                         measurements.pushBack(singleMeasurement(dens,
                                                                 si,
                                                                 repr,
@@ -56,6 +77,7 @@ void TimeMeasurer::runMeasurement() {
     while(iterator.hasNext()) {
         ofstream << "\n" << iterator.next();
     }
+    clear();
 }
 
 SingleMeasurement
@@ -77,8 +99,12 @@ TimeMeasurer::singleMeasurement(int densityOption,
     }
     GraphPointer graph;
     unsigned long long time{};
+    gotoxy(0,5);
+    std::cout << "Instance: " << "    " << "out of 128";
     for(int i = 0; i < 128; i++) {
-        std::cout << "^";
+        gotoxy(10,5);
+        std::cout << std::setw(3) << i + 1;
+        gotoxy(20, 20);
         switch(probOption) {
             case 0:
                 graph = GraphGenerator().generateGraphUndirected(factory,
