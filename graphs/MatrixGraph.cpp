@@ -1,36 +1,34 @@
 #include "MatrixGraph.h"
 #include <iomanip>
 
-void MatrixGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
+void MatrixGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) noexcept {
     try {
         //jeżeli przynajmniej jeden z wierzchołków nie istnieje,
         //wyszukanie rzuci wyjątkiem, który złapiemy;
         //operacja zakończy się cichum niepowodzeniem
         auto& initVer = vertexWithId(initialVertex);
         auto& finVer = vertexWithId(finalVertex);
-        for(size_t i = 0; i < edgesAmount(); i++) {
-            //jeżeli taka krawędź już istnieje, tylko aktualizujemy jej wagę
-            if(initVer.incidences[i] == Incidence::OUT && finVer.incidences[i] != Incidence::NONE) {
-                weights[i] = weight;
-                return;
-            }
-        }
         //jeżeli taka krawędź jeszcze nie istnieje
-        auto iterator = vertices.iterator();
         for(size_t i = 0; i < verticesAmount(); i++) {
-            if(i != initialVertex && i != finalVertex) {
+            if(edgesAmount() == vertices[i].incidences.getLength())
                 vertices[i].incidences.pushBack(Incidence::NONE);
+            if(i != initialVertex && i != finalVertex) {
+                vertices[i].incidences[edgesAmount()] = Incidence::NONE;
             }
         }
-        initVer.incidences.pushBack(Incidence::OUT);
-        finVer.incidences.pushBack(Incidence::IN);
-        weights.pushBack(weight);
+        initVer.incidences[edgesAmount()] = Incidence::OUT;
+        finVer.incidences[edgesAmount()] = Incidence::IN;
+        if(weights.getLength() == edgesAmount())
+            weights.pushBack(weight);
+        else
+            weights[edgesAmount()] = weight;
+        edgesNumber++;
     } catch (std::exception& exception) {
         //ciche niepowodzenie
     }
 }
 
-void MatrixGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) {
+void MatrixGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) noexcept {
     try {
         //jeżeli przynajmniej jeden z wierzchołków nie istnieje,
         //wyszukanie rzuci wyjątkiem, który złapiemy;
@@ -49,6 +47,7 @@ void MatrixGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalV
                         ver.incidences.removeAt(i);
                     }
                     weights.removeAt(i);
+                    edgesNumber--;
                     return;
                 } else if(finVer.incidences[i] == Incidence::OUT) {
                     // jeżeli krawędź była nieskierowana, zamienia się
@@ -70,7 +69,7 @@ vertexId_t MatrixGraph::verticesAmount() {
 }
 
 vertexId_t MatrixGraph::edgesAmount() {
-    return weights.getLength();
+    return edgesNumber;
 }
 
 PathPointer MatrixGraph::shortestPathDijkstra(vertexId_t initialVertex, vertexId_t finalVertex) {
@@ -208,7 +207,7 @@ PathPointer MatrixGraph::shortestPathBF(vertexId_t initialVertex, vertexId_t fin
 
 GraphPointer MatrixGraph::MSTPrim() {
     //zwracany podgraf
-    auto tree = GraphPointer(static_cast<Graph*>(new MatrixGraph(verticesAmount())));
+    auto tree = GraphPointer(static_cast<Graph*>(new MatrixGraph(verticesAmount(), verticesAmount() - 1)));
     size_t numberOfAddedVertices{};
     //drzewo zawierające identyfikatory już dodanych wierzchołków
     rbtree<vertexId_t> addedVertices;
@@ -244,7 +243,7 @@ GraphPointer MatrixGraph::MSTPrim() {
         addedVertices.put(lastAddedVertex);
 
         //dodajemy krawędzie wyjściowe z nowego wierzchołka do kolejki
-        for(size_t i = 0; i < weights.getLength(); i++) {
+        for(size_t i = 0; i < edgesAmount(); i++) {
             if(vertices[lastAddedVertex].incidences[i] == Incidence::OUT) {
                 for(size_t k = 0; k < verticesAmount(); k++) {
                     if(vertices[k].incidences[i] != Incidence::NONE && k != lastAddedVertex) {
@@ -269,7 +268,7 @@ GraphPointer MatrixGraph::MSTPrim() {
 }
 
 GraphPointer MatrixGraph::MSTKruskal() {
-    auto mst = GraphPointer(static_cast<Graph*>(new MatrixGraph(verticesAmount())));
+    auto mst = GraphPointer(static_cast<Graph*>(new MatrixGraph(verticesAmount(), verticesAmount() - 1)));
     Array<vertexId_t> colorMappings(verticesAmount());
     FixedMinimumHeap<Edge> edges(edgesAmount() * 2);
     //przygotowanie struktur pomocniczych
@@ -340,35 +339,34 @@ std::string MatrixGraph::getRepresentation() {
     return stream.str();
 }
 
-void MatrixGraph::addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
+void MatrixGraph::addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) noexcept {
     try {
         //jeżeli przynajmniej jeden z wierzchołków nie istnieje,
         //wyszukanie rzuci wyjątkiem, który złapiemy;
         //operacja zakończy się cichum niepowodzeniem
         auto& initVer = vertexWithId(initialVertex);
         auto& finVer = vertexWithId(finalVertex);
-        for(size_t i = 0; i < edgesAmount(); i++) {
-            //jeżeli taka krawędź już istnieje, tylko aktualizujemy jej wagę
-            if(initVer.incidences[i] == Incidence::OUT && finVer.incidences[i] == Incidence::OUT) {
-                weights[i] = weight;
-                return;
-            }
-        }
         //jeżeli taka krawędź jeszcze nie istnieje
         for(size_t i = 0; i < verticesAmount(); i++) {
-            if(i != initialVertex && i != finalVertex) {
+            if(edgesAmount() == vertices[i].incidences.getLength())
                 vertices[i].incidences.pushBack(Incidence::NONE);
+            if(i != initialVertex && i != finalVertex) {
+                vertices[i].incidences[edgesAmount()] = Incidence::NONE;
             }
         }
-        initVer.incidences.pushBack(Incidence::OUT);
-        finVer.incidences.pushBack(Incidence::OUT);
-        weights.pushBack(weight);
+        initVer.incidences[edgesAmount()] = Incidence::OUT;
+        finVer.incidences[edgesAmount()] = Incidence::OUT;
+        if(weights.getLength() == edgesAmount())
+            weights.pushBack(weight);
+        else
+            weights[edgesAmount()] = weight;
+        edgesNumber++;
     } catch (std::exception& exception) {
         //ciche niepowodzenie
     }
 }
 
-void MatrixGraph::removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) {
+void MatrixGraph::removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) noexcept {
     try {
         //jeżeli przynajmniej jeden z wierzchołków nie istnieje,
         //wyszukanie rzuci wyjątkiem, który złapiemy;
@@ -387,6 +385,7 @@ void MatrixGraph::removeEdgeUndirected(vertexId_t initialVertex, vertexId_t fina
                         ver.incidences.removeAt(i);
                     }
                     weights.removeAt(i);
+                    edgesNumber--;
                     return;
                 }
             }
@@ -403,4 +402,14 @@ MatrixGraphVertex &MatrixGraph::vertexWithId(vertexId_t id) {
 MatrixGraph::MatrixGraph(size_t size) {
     vertices = Array<MatrixGraphVertex>(size);
     weights = Array<int>();
+    edgesNumber = 0;
+}
+
+MatrixGraph::MatrixGraph(size_t size, size_t edges) {
+    edgesNumber = 0;
+    vertices = Array<MatrixGraphVertex>(size);
+    for(size_t i = 0; i < size; i ++) {
+        vertices[i].incidences = Array<Incidence>(edges);
+    }
+    weights = Array<int>(edges);
 }

@@ -12,10 +12,10 @@ using GraphPointer = std::shared_ptr<Graph>;
 
 class Graph {
 public:
-    virtual void addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) = 0;
-    virtual void addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) = 0;
-    virtual void removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
-    virtual void removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) = 0;
+    virtual void addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) noexcept = 0;
+    virtual void addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) noexcept = 0;
+    virtual void removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) noexcept = 0;
+    virtual void removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) noexcept = 0;
     virtual vertexId_t verticesAmount() = 0;
     virtual vertexId_t edgesAmount() = 0;
 

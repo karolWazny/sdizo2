@@ -5,6 +5,7 @@
 
 class GraphFactory {
 public:
+    virtual GraphPointer build(size_t vertices, size_t edges) = 0;
     virtual GraphPointer build(size_t vertices) = 0;
 };
 

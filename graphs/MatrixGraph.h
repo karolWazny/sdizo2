@@ -3,16 +3,18 @@
 
 #include <sstream>
 #include "Graph.h"
+#include "GraphGenerator.h"
 
 struct MatrixGraphVertex;
 
 class MatrixGraph : public Graph{
 public:
     explicit MatrixGraph(size_t size);
-    void addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
-    void addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
-    void removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) override;
-    void removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) override;
+    explicit MatrixGraph(size_t size, size_t edges);
+    void addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) noexcept override;
+    void addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) noexcept override;
+    void removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) noexcept override;
+    void removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) noexcept override;
     size_t verticesAmount() override;
     size_t edgesAmount() override;
 
@@ -28,6 +30,7 @@ private:
 
     Array<MatrixGraphVertex> vertices;
     Array<int> weights;
+    size_t edgesNumber;
 };
 
 enum Incidence : char {

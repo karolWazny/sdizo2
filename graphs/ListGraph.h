@@ -11,10 +11,10 @@ class ListGraph : public Graph {
 public:
     explicit ListGraph(size_t vertices);
 
-    void addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
-    void addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) override;
-    void removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) override;
-    void removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) override;
+    void addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) noexcept override;
+    void addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) noexcept override;
+    void removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) noexcept override;
+    void removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) noexcept override;
     size_t verticesAmount() override;
     size_t edgesAmount() override;
 

@@ -10,24 +10,15 @@ bool operator==(const ListGraphEdge& e, const ListGraphEdge& f) {
     return e.finalVertex == f.finalVertex;
 }
 
-void ListGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
-    if(finalVertex >= verticesAmount())
-        return; //ciche niepowodzenie, jeżeli drugi wierzchołek nie istnieje w grafie
-    auto index = vertices[initialVertex].edges.firstIndexOf((ListGraphEdge)finalVertex);
+void ListGraph::addEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) noexcept {
     try{
-        if(index > -1)
-        {
-            //jeżeli taka krawędź już istnieje, aktualizujemy jej wagę
-            vertices[initialVertex].edges.get(index).weight = weight;
-        } else {
-            vertices[initialVertex].edges.pushBack(ListGraphEdge(finalVertex, weight));
-        }
+        vertices[initialVertex].edges.pushBack(ListGraphEdge(finalVertex, weight));
     } catch (std::exception& exception) {
 
     }
 }
 
-void ListGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) {
+void ListGraph::removeEdgeDirected(vertexId_t initialVertex, vertexId_t finalVertex) noexcept {
     try {
         auto& initVer = vertices[initialVertex];
         initVer.edges.remove(ListGraphEdge(finalVertex));
@@ -299,12 +290,12 @@ ListIterator<ListGraphEdge> ListGraph::edgesFromVertex(vertexId_t vertexId) {
     return vertices[vertexId].edges.iterator();
 }
 
-void ListGraph::addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) {
+void ListGraph::addEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex, int weight) noexcept {
     addEdgeDirected(initialVertex, finalVertex, weight);
     addEdgeDirected(finalVertex, initialVertex, weight);
 }
 
-void ListGraph::removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) {
+void ListGraph::removeEdgeUndirected(vertexId_t initialVertex, vertexId_t finalVertex) noexcept {
     removeEdgeDirected(initialVertex, finalVertex);
     removeEdgeDirected(finalVertex, initialVertex);
 }

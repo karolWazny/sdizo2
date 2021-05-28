@@ -43,24 +43,35 @@ void TimeMeasurer::runMeasurement() {
         clear();
         gotoxy(0,0);
         std::cout << "Density: " << std::to_string(densities[dens]) << "% (option "<< dens + 1 << " out of 4)"  << "        ";
+
+        std::string filename = std::to_string(startTime);
+        filename += "meas";
+        filename += std::to_string(dens);
+        filename += ".txt";
+        std::ofstream ofstream = std::ofstream(filename);
+
+        ofstream << columnHeaders;
+        auto iterator = measurements.iterator();
+        while(iterator.hasNext()) {
+            ofstream << "\n" << iterator.next();
+        }
+
+        ofstream.close();
+
+
         for(int si = 0; si < 5; si++) {
 #endif
             gotoxy(0,1);
             std::cout << "Size: " << std::setw(6) << std::left << sizes[si] << " (option "<< si + 1 << " out of 5)"  << "        ";
-            for(int repr = 0; repr < 2; repr++) {
-                gotoxy(0,2);
-                std::cout << "Representation: "<< std::setw(10) << std::left << representations[repr] << " (option "<< repr + 1 << " out of 2)"  << "        ";
-                for(int prob = 0; prob < 2; prob++) {
-                    gotoxy(0,3);
-                    std::cout << "Problem: " << std::setw(10) << std::left << problems[prob] << " (option "<< prob + 1 << " out of 2)"  << "        ";
-                    for(int algo = 0; algo < 2; algo++) {
-                        gotoxy(0,4);
-                        std::cout << "Algorithm: " << std::setw(10) << std::left << algorithms[prob][algo] << " (option "<< algo + 1 << " out of 2)"  << "        ";
-                        measurements.pushBack(singleMeasurement(dens,
-                                                                si,
-                                                                repr,
-                                                                prob,
-                                                                algo));
+            for(int prob = 0; prob < 2; prob++) {
+                gotoxy(0,3);
+                std::cout << "Problem: " << std::setw(10) << std::left << problems[prob] << " (option "<< prob + 1 << " out of 2)"  << "        ";
+                auto meas = singleMeasurement(dens,
+                                              si,
+                                              prob);
+                for(int i = 0; i < 2; i++){
+                    for(int j = 0; j < 2; j++){
+                        measurements.pushBack(meas[i][j]);
                     }
                 }
             }
@@ -80,62 +91,67 @@ void TimeMeasurer::runMeasurement() {
     clear();
 }
 
-SingleMeasurement
+Array<Array<SingleMeasurement>>
 TimeMeasurer::singleMeasurement(int densityOption,
                                 int sizeOption,
-                                int reprOption,
-                                int probOption,
-                                int algOption) {
-    FactoryPointer factory;
-    switch(reprOption) {
-        case 0:
-            factory = FactoryPointer(new ListGraphFactory());
-            break;
-        case 1:
-            factory = FactoryPointer(new MatrixGraphFactory());
-            break;
-        default:
-            break;
-    }
-    GraphPointer graph;
-    unsigned long long time{};
-    gotoxy(0,5);
-    std::cout << "Instance: " << "    " << "out of 128";
-    for(int i = 0; i < 128; i++) {
-        gotoxy(10,5);
+                                int probOption) {
+    Array<FactoryPointer> factories(2);
+    factories[0] = FactoryPointer(new ListGraphFactory);
+    factories[1] = FactoryPointer(new MatrixGraphFactory);
+    Array<GraphPointer> graphs;
+    unsigned long long time[2][2]{};
+    gotoxy(0, 5);
+    std::cout << "Instance: " << "    " << "out of 20";
+    for (int i = 0; i < 20; i++) {
+        gotoxy(10, 5);
         std::cout << std::setw(3) << i + 1;
         gotoxy(20, 20);
-        switch(probOption) {
+        switch (probOption) {
             case 0:
-                graph = GraphGenerator().generateGraphUndirected(factory,
+                graphs = GraphGenerator().generateUndirectedTwin(factories,
                                                                  sizes[sizeOption],
                                                                  densities[densityOption]);
                 break;
             case 1:
-                graph = GraphGenerator().generateGraphDirected(factory,
-                                                                 sizes[sizeOption],
-                                                                 densities[densityOption]);
+                graphs = GraphGenerator().generateDirectedTwin(factories,
+                                                               sizes[sizeOption],
+                                                               densities[densityOption]);
                 break;
             default:
                 break;
         }
-
-        unsigned long long tmp = measuringMethods[probOption][algOption](graph);
-        if(tmp != 0) {
-            time += tmp;
-        } else {
-            i--;
+        for (int j = 0; j < 2; j++) {
+            for (int k = 0; k < 2; k++) {
+                unsigned long long tmp = measuringMethods[probOption][j](graphs[k]);
+                if (tmp != 0) {
+                    time[j][k] += tmp;
+                } else {
+                    i--;
+                }
+            }
         }
     }
-    time /= 128;
 
-    SingleMeasurement meas{};
-    meas.size = sizes[sizeOption];
-    meas.time = time;
-    meas.density = densities[densityOption];
-    meas.representation = representations[reprOption];
-    meas.algorithm = algorithms[probOption][algOption];
-    meas.problem = problems[probOption];
+    time[0][0] /= 128;
+    time[1][0] /= 128;
+    time[0][1] /= 128;
+    time[1][1] /= 128;
+
+    Array<Array<SingleMeasurement>> meas(2);
+    for(int i = 0; i < 2; i++){
+        meas[i] = Array<SingleMeasurement>(2);
+
+    }
+    for (int j = 0; j < 2; j++) {
+        for (int k = 0; k < 2; k++) {
+            meas[j][k].size = sizes[sizeOption];
+            meas[j][k].time = time[j][k];
+            meas[j][k].density = densities[densityOption];
+            meas[j][k].representation = representations[k];
+            meas[j][k].algorithm = algorithms[probOption][j];
+            meas[j][k].problem = problems[probOption];
+        }
+    }
     return meas;
 }
 
