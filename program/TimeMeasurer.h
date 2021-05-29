@@ -30,7 +30,7 @@ private:
     static unsigned long long (*(measuringMethods[2][2]))(GraphPointer);
 
     static constexpr unsigned char densities[4] = {25, 50, 75, 99};
-    static constexpr size_t sizes[5] = {30, 60, 150, 300, 600};
+    static constexpr size_t sizes[5] = {10, 20, 50, 100, 200};
     static std::string representations[2];
     static std::string problems[2];
     static std::string algorithms[2][2];
