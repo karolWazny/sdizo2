@@ -4,26 +4,25 @@ GraphPointer GraphGenerator::generateGraphDirected(const FactoryPointer factory,
                                                    const size_t vertices,
                                                    const unsigned char fulfilment) {
     GraphPointer graph;
-    //ListGraph referenceGraph(0);
+    ListGraph referenceGraph(0);
     do {
-        //referenceGraph = ListGraph(vertices);
+        referenceGraph = ListGraph(vertices);
         unsigned long edgesFull = fullGraphEdgesDirected(vertices);
         unsigned long edgesInGraph = edgesFull * fulfilment / 100;
         graph = factory->build(vertices, edgesInGraph);
         for (size_t i = 0; i < vertices; i++) {
             for (size_t k = 0; k < vertices; k++) {
                 if (i != k) {
-                    if (randomizer.getBool(fulfilment, 100)) {
+                    if (randomizer.getBool(edgesInGraph, edgesFull)) {
                         graph->addEdgeDirected(i, k, randomizer.getInt(49) + 1);
-                        //referenceGraph.addEdgeDirected(i, k, 1);
-                        //edgesInGraph--;
+                        referenceGraph.addEdgeDirected(i, k, 1);
+                        edgesInGraph--;
                     }
-                    //edgesFull--;
+                    edgesFull--;
                 }
             }
         }
-    } while (false);
-    //} while(referenceGraph.verticesAmount() * 2 > referenceGraph.MSTPrim()->edgesAmount() + 2);
+    } while(referenceGraph.verticesAmount() * 2 > referenceGraph.MSTPrim()->edgesAmount() + 2);
     return graph;
 }
 
@@ -31,24 +30,23 @@ GraphPointer GraphGenerator::generateGraphUndirected(FactoryPointer factory,
                                                      size_t vertices,
                                                      unsigned char fulfilment) {
     GraphPointer graph;
-    //ListGraph referenceGraph(0);
+    ListGraph referenceGraph(0);
     do {
-        //referenceGraph = ListGraph(vertices);
+        referenceGraph = ListGraph(vertices);
         unsigned long edgesFull = fullGraphEdgesUndirected(vertices);
         unsigned long edgesInGraph = edgesFull * fulfilment / 100;
         graph = factory->build(vertices, edgesInGraph);
         for(size_t i = 0; i < vertices; i++) {
             for(size_t k = i + 1; k < vertices; k++) {
-                if(randomizer.getBool(fulfilment, 100)) {
+                if(randomizer.getBool(edgesInGraph, edgesFull)) {
                     graph->addEdgeUndirected(i, k, randomizer.getInt(49) + 1);
-                    //referenceGraph.addEdgeUndirected(i, k, randomizer.getInt(49) + 1);
-                    //edgesInGraph--;
+                    referenceGraph.addEdgeUndirected(i, k, randomizer.getInt(49) + 1);
+                    edgesInGraph--;
                 }
-                //edgesFull--;
+                edgesFull--;
             }
         }
-    } while(false);
-    //} while(referenceGraph.verticesAmount() * 2 > referenceGraph.MSTPrim()->edgesAmount() + 2);
+    } while(referenceGraph.verticesAmount() * 2 > referenceGraph.MSTPrim()->edgesAmount() + 2);
     return graph;
 }
 
@@ -78,7 +76,7 @@ unsigned long GraphGenerator::fullGraphEdgesDirected(size_t vertices) {
 
 Array<GraphPointer>
 GraphGenerator::generateDirectedTwin(Array<FactoryPointer> factories, size_t vertices, unsigned char fulfilment) {
-    //ListGraph referenceGraph(0);
+    ListGraph referenceGraph(0);
     Array<GraphPointer> graphs(factories.getLength());
     for(int i = 0; i < factories.getLength(); i++) {
         graphs[i] = factories[i]->build(vertices);
@@ -89,26 +87,25 @@ GraphGenerator::generateDirectedTwin(Array<FactoryPointer> factories, size_t ver
         for(size_t i = 0; i < vertices; i++) {
             for(size_t k = 0; k < vertices; k++) {
                 if(i != k) {
-                    if(randomizer.getBool(fulfilment, 100)) {
+                    if(randomizer.getBool(edgesInGraph, edgesFull)) {
                         auto weight = randomizer.getInt(49) + 1;
-                        //referenceGraph.addEdgeDirected(i, k, weight);
+                        referenceGraph.addEdgeDirected(i, k, weight);
                         for(int j = 0; j < graphs.getLength(); j++) {
                             graphs[j]->addEdgeDirected(i, k, weight);
                         }
-                        //edgesInGraph--;
+                        edgesInGraph--;
                     }
-                    //edgesFull--;
+                    edgesFull--;
                 }
             }
         }
-    } while(false);
-    //} while(referenceGraph.verticesAmount() * 2 > referenceGraph.MSTPrim()->edgesAmount() + 2);
+    } while(referenceGraph.verticesAmount() * 2 > referenceGraph.MSTPrim()->edgesAmount() + 2);
     return graphs;
 }
 
 Array<GraphPointer>
 GraphGenerator::generateUndirectedTwin(Array<FactoryPointer> factories, size_t vertices, unsigned char fulfilment) {
-    //ListGraph referenceGraph(0);
+    ListGraph referenceGraph(0);
     Array<GraphPointer> graphs(factories.getLength());
     for(int i = 0; i < factories.getLength(); i++) {
         graphs[i] = factories[i]->build(vertices);
@@ -118,18 +115,17 @@ GraphGenerator::generateUndirectedTwin(Array<FactoryPointer> factories, size_t v
         unsigned long edgesInGraph = edgesFull * fulfilment / 100;
         for(size_t i = 0; i < vertices; i++) {
             for(size_t k = i + 1; k < vertices; k++) {
-                if(randomizer.getBool(fulfilment, 100)) {
+                if(randomizer.getBool(edgesInGraph, edgesFull)) {
                     auto weight = randomizer.getInt(49) + 1;
-                    //referenceGraph.addEdgeUndirected(i, k, weight);
+                    referenceGraph.addEdgeUndirected(i, k, weight);
                     for(int j = 0; j < graphs.getLength(); j++) {
                         graphs[j]->addEdgeUndirected(i, k, weight);
                     }
-                    //edgesInGraph--;
+                    edgesInGraph--;
                 }
-                //edgesFull--;
+                edgesFull--;
             }
         }
-    } while(false);
-    //} while(referenceGraph.verticesAmount() * 2 > referenceGraph.MSTPrim()->edgesAmount() + 2);
+    } while(referenceGraph.verticesAmount() * 2 > referenceGraph.MSTPrim()->edgesAmount() + 2);
     return graphs;
 }

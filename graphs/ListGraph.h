@@ -4,8 +4,8 @@
 #include "Graph.h"
 #include "../structure_templates_lib/structures.h"
 
-struct ListGraphEdge;
-struct ListGraphVertex;
+class ListGraphEdge;
+class ListGraphVertex;
 
 class ListGraph : public Graph {
 public:
@@ -39,7 +39,7 @@ public:
     ListGraphEdge() : finalVertex{0} {};
 };
 
-struct ListGraphVertex {
+class ListGraphVertex {
 public:
     std::string toString();
 
