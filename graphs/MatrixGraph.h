@@ -25,6 +25,8 @@ public:
 
     std::string getRepresentation() override;
 
+    long getWeight() override;
+
 private:
     MatrixGraphVertex& vertexWithId(vertexId_t id);
 

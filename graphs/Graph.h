@@ -25,6 +25,8 @@ public:
     virtual GraphPointer MSTKruskal() = 0;
 
     virtual std::string getRepresentation() = 0;
+
+    virtual long getWeight();
 };
 
 struct VertexColor {

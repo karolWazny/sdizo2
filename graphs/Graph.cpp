@@ -39,3 +39,7 @@ bool operator>(const PathVertex& e, const PathVertex& f) {
 bool operator<(const PathVertex& e, const PathVertex& f) {
     return e.pathLength < f.pathLength;
 }
+
+long Graph::getWeight() {
+    return 0;
+}

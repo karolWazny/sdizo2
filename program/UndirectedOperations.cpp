@@ -82,7 +82,9 @@ void UndirectedOperations::primAlgorithm() {
                  "Reprezentacja listowa:\n";
     std::cout << listGraph->MSTPrim()->getRepresentation() << std::endl;
     std::cout << "oraz z zastosowaniem macierzy incydencji:\n";
-    std::cout << matrixGraph->MSTPrim()->getRepresentation() << std::endl;
+    auto mst = matrixGraph->MSTPrim();
+    std::cout << mst->getRepresentation() << std::endl;
+    std::cout << "Calkowita waga MST: " << std::to_string(mst->getWeight()) << std::endl;
 }
 
 void UndirectedOperations::kruskalAlgorithm() {
@@ -90,7 +92,9 @@ void UndirectedOperations::kruskalAlgorithm() {
                  "Reprezentacja listowa:\n";
     std::cout << listGraph->MSTKruskal()->getRepresentation() << std::endl;
     std::cout << "oraz z zastosowaniem macierzy incydencji:\n";
-    std::cout << matrixGraph->MSTKruskal()->getRepresentation() << std::endl;
+    auto mst = matrixGraph->MSTKruskal();
+    std::cout << mst->getRepresentation() << std::endl;
+    std::cout << "Calkowita waga MST: " << std::to_string(mst->getWeight()) << std::endl;
 }
 
 void UndirectedOperations::generate() {

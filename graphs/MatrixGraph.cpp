@@ -413,3 +413,11 @@ MatrixGraph::MatrixGraph(size_t size, size_t edges) {
     }
     weights = Array<int>(edges);
 }
+
+long MatrixGraph::getWeight() {
+    long totalWeight{};
+    for(size_t i = 0; i < edgesAmount(); i++) {
+        totalWeight += weights[i];
+    }
+    return totalWeight;
+}
